@@ -34,6 +34,7 @@ function setup() {
 }
 
 function draw() {
+  scale(2);
   background(255-map(lightY,0,height,0,255),random(map(lightY,0,height,0,17))+228-map(lightY,0,height,0,228),random(map(lightY,0,height,0,63))+192-map(lightY,0,height,0,192));
   strokeWeight(16);
   stroke(map(lightY,0,height,0,255),random(map(lightY,0,height,0,64))+0,random(64)+64);
