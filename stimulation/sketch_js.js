@@ -93,3 +93,6 @@ function moveLight() {
       if(lightY > 0) { lightY-=HALF_PI; }
     }
 }
+function windowResized() {
+  resizeCanvas(windowWidth, windowHeight);
+}
