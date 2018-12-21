@@ -66,16 +66,16 @@ function draw() {
   pop();
 
   fill(map(lightY,0,height,0,255),random(map(lightY,0,height,0,64)),random(64)+64);
-  /*
+  
   textAlign(RIGHT);
   text(lightY, txtsize*4.75, height-txtsize*3);
   textAlign(LEFT);
-  text("STIMULATION", txtsize, height-txtsize*2);
+  text('STIMULATION', txtsize, height-txtsize*2);
   if(lightY > height/2) {
     fill(map(lightY,0,height,128,255),(map(lightY,0,height,64,128)),random(64)+64);
-    text("CAUTION", txtsize, height-txtsize);
+    text('CAUTION', txtsize, height-txtsize);
   }
-  */
+  
 }
 function moveLight() {
   if(lightXbit == false) {
