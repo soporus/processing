@@ -9,15 +9,13 @@ function preload() {
 var txtsize = 30;
 */
 var cols, rows;
-var scaler = 30;
+var scaler = 48;
 var w = 990;
 var h = 2000;
 //var r,g,b;
 var flying = 0.0;
-var lightX = 1.0;
-var lightY = 1.0;
-var lightXbit = false;
-var lightYbit = false;
+var pongVar = 1.0;
+var pongVarbit = false;
 
 var terrain = [];
 var rot = 0.0;
@@ -38,74 +36,64 @@ function setup() {
 }
 
 function draw() {
-  background(255 - map(lightY, 0, height, 0, 255), random(map(lightY, 0, height,
-    0, 17)) + 228 - map(lightY, 0, height, 0, 228), random(map(lightY, 0,
-    height, 0, 63)) + 192 - map(lightY, 0, height, 0, 192));
-  stroke(map(lightY, 0, height, 0, 255), random(map(lightY, 0, height, 0, 64)) +
+  background(255 - map(pongVar, 0, height, 0, 255), random(map(pongVar, 0,
+    height,
+    0, 17)) + 228 - map(pongVar, 0, height, 0, 228), random(map(pongVar, 0,
+    height, 0, 63)) + 192 - map(pongVar, 0, height, 0, 192));
+  stroke(map(pongVar, 0, height, 0, 255), random(map(pongVar, 0, height, 0, 64)) +
     0, random(64) + 64);
   //fill terrain values
-  flying -= 0.1 + map(lightY, 0, height, 0, 0.4);
+  flying -= 0.1 + map(pongVar, 0, height, 0, 0.4);
   var yoff = flying;
   for (var y = 0; y < rows; y++) {
     var xoff = 0.0;
     for (var x = 0; x < cols; x++) {
-      terrain[x][y] = map(noise(xoff, yoff), 0, 1, -map(lightY, 0, height, 0,
-        1000), map(lightY, 0, height, 0, random(map(lightY, 0, height, 0,
+      terrain[x][y] = map(noise(xoff, yoff), 0, 1, -map(pongVar, 0, height, 0,
+        1000), map(pongVar, 0, height, 0, random(map(pongVar, 0, height, 0,
         128)) + 1000));
-      xoff += 0.1 + map(lightY, 0, height, 0, 0.4);
+      xoff += 0.1 + map(pongVar, 0, height, 0, 0.4);
     }
-    yoff += 0.1 + map(lightY, 0, height, 0, 0.4);
+    yoff += 0.1 + map(pongVar, 0, height, 0, 0.4);
   }
   push();
-  translate(-width / 3, -height - 220, -1000); //-height/1.3
+  translate(-width / 2.1, -height - 200, -1000); //-height/1.3
   rotateY(radians(-30));
-  moveLight();
+  pong();
   //print(terrain.length);
-  for (var y = 0; y < rows - 1; ++y) {
+  for (var y2 = 0; y2 < rows - 1; y2++) {
     beginShape();
-    for (var x = 0; x < cols - 1; ++x) {
-      vertex(x * scaler, y * scaler, terrain[x][y]);
-      vertex(x * scaler, (y + 1) * scaler, terrain[x][y + 1]);
+    for (var x2 = 0; x2 < cols - 1; x2++) {
+      vertex(x2 * scaler, y2 * scaler, terrain[x2][y2]);
+      vertex(x2 * scaler, (y2 + 1) * scaler, terrain[x2][y2 + 1]);
     }
     endShape(CLOSE);
   }
   pop();
-  fill(map(lightY, 0, height, 0, 255), random(map(lightY, 0, height, 0, 64)),
+  fill(map(pongVar, 0, height, 0, 255), random(map(pongVar, 0, height, 0, 64)),
     random(64) + 64);
   /*
   textAlign(RIGHT);
-  text(lightY, txtsize * 4.75, height - txtsize * 3);
+  text(pongVar, txtsize * 4.75, height - txtsize * 3);
   textAlign(LEFT);
   text("STIMULATION", txtsize, windowHeight - txtsize * 2);
-  if (lightY > height / 2) {
-    fill(map(lightY, 0, height, 128, 255), (map(lightY, 0, height, 64, 128)),
+  if (pongVar > height / 2) {
+    fill(map(pongVar, 0, height, 128, 255), (map(pongVar, 0, height, 64, 128)),
       random(64) + 64);
     text('CAUTION', txtsize, height - txtsize);
   }
   */
 }
 
-function moveLight() {
-  if (lightXbit == false) {
-    if (lightX > width) lightXbit = !lightXbit;
-    if (lightX <= width) {
-      lightX += 3;
+function pong() {
+  if (pongVarbit == false) {
+    if (pongVar > height) pongVarbit = !pongVarbit;
+    if (pongVar <= height) {
+      pongVar += HALF_PI;
     }
   } else {
-    if (lightX <= 0) lightXbit = !lightXbit;
-    if (lightX > 0) {
-      lightX -= 3;
-    }
-  }
-  if (lightYbit == false) {
-    if (lightY > height) lightYbit = !lightYbit;
-    if (lightY <= height) {
-      lightY += HALF_PI;
-    }
-  } else {
-    if (lightY <= 0) lightYbit = !lightYbit;
-    if (lightY > 0) {
-      lightY -= HALF_PI;
+    if (pongVar <= 0) pongVarbit = !pongVarbit;
+    if (pongVar > 0) {
+      pongVar -= HALF_PI;
     }
   }
 }
