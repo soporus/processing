@@ -1,10 +1,13 @@
+/*
+var myFont;
+
 function preload() {
   // Ensure the .ttf or .otf font stored in the assets directory
   // is loaded before setup() and draw() are called
-  font = loadFont('assets/centuryGoth.ttf');
+  myFont = loadFont("assets/centuryGoth.otf");
 }
-var txtsize = 16.0;
-
+var txtsize = 30;
+*/
 var cols, rows;
 var scaler = 30;
 var w = 990;
@@ -20,12 +23,12 @@ var terrain = [];
 var rot = 0.0;
 
 function setup() {
-  noSmooth();
-  textFont(font);
+  /*
+  textFont(myFont);
   textSize(txtsize);
+  */
   cols = w / scaler;
   rows = h / scaler;
-  //createCanvas(screen.width,screen.height,WEBGL);
   createCanvas(windowWidth, windowHeight, WEBGL);
   terrain = [];
   for (var j = 0; j < cols; j++) {
@@ -35,11 +38,9 @@ function setup() {
 }
 
 function draw() {
-  //scale(2);
   background(255 - map(lightY, 0, height, 0, 255), random(map(lightY, 0, height,
     0, 17)) + 228 - map(lightY, 0, height, 0, 228), random(map(lightY, 0,
     height, 0, 63)) + 192 - map(lightY, 0, height, 0, 192));
-  strokeWeight(16);
   stroke(map(lightY, 0, height, 0, 255), random(map(lightY, 0, height, 0, 64)) +
     0, random(64) + 64);
   //fill terrain values
@@ -69,17 +70,17 @@ function draw() {
     endShape(CLOSE);
   }
   pop();
-
   fill(map(lightY, 0, height, 0, 255), random(map(lightY, 0, height, 0, 64)),
     random(64) + 64);
   /*
   textAlign(RIGHT);
-  text(lightY, txtsize*4.75, height-txtsize*3);
+  text(lightY, txtsize * 4.75, height - txtsize * 3);
   textAlign(LEFT);
-  text('STIMULATION', txtsize, height-txtsize*2);
-  if(lightY > height/2) {
-    fill(map(lightY,0,height,128,255),(map(lightY,0,height,64,128)),random(64)+64);
-    text('CAUTION', txtsize, height-txtsize);
+  text("STIMULATION", txtsize, windowHeight - txtsize * 2);
+  if (lightY > height / 2) {
+    fill(map(lightY, 0, height, 128, 255), (map(lightY, 0, height, 64, 128)),
+      random(64) + 64);
+    text('CAUTION', txtsize, height - txtsize);
   }
   */
 }
