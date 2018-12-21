@@ -1,7 +1,7 @@
 function preload() {
   // Ensure the .ttf or .otf font stored in the assets directory
   // is loaded before setup() and draw() are called
-  if(font = loadFont('assets/centuryGoth.ttf')){ print("font loaded, Babe.");}
+  font = loadFont('assets/centuryGoth.ttf');
 }
 var txtsize = 16.0;
 
@@ -23,8 +23,8 @@ function setup() {
   noSmooth();
   textFont(font);
   textSize(txtsize);
-  cols = w/scaler;
-  rows = h/scaler;
+  cols = w / scaler;
+  rows = h / scaler;
   //createCanvas(screen.width,screen.height,WEBGL);
   createCanvas(windowWidth, windowHeight, WEBGL);
   terrain = [];
@@ -36,36 +36,42 @@ function setup() {
 
 function draw() {
   //scale(2);
-  background(255-map(lightY,0,height,0,255),random(map(lightY,0,height,0,17))+228-map(lightY,0,height,0,228),random(map(lightY,0,height,0,63))+192-map(lightY,0,height,0,192));
+  background(255 - map(lightY, 0, height, 0, 255), random(map(lightY, 0, height,
+    0, 17)) + 228 - map(lightY, 0, height, 0, 228), random(map(lightY, 0,
+    height, 0, 63)) + 192 - map(lightY, 0, height, 0, 192));
   strokeWeight(16);
-  stroke(map(lightY,0,height,0,255),random(map(lightY,0,height,0,64))+0,random(64)+64);
+  stroke(map(lightY, 0, height, 0, 255), random(map(lightY, 0, height, 0, 64)) +
+    0, random(64) + 64);
   //fill terrain values
-  flying-=0.1+map(lightY,0,height,0,.4);
+  flying -= 0.1 + map(lightY, 0, height, 0, 0.4);
   var yoff = flying;
-  for(var y = 0; y < rows; y++) {
+  for (var y = 0; y < rows; y++) {
     var xoff = 0.0;
-    for(var x = 0; x < cols; x++) {
-      terrain[x][y] = map(noise(xoff,yoff), 0, 1, -map(lightY, 0, height,0,1000),map(lightY, 0, height,0,random(map(lightY,0,height,0,128))+1000));
-      xoff+=0.1+map(lightY,0,height,0,.4);
+    for (var x = 0; x < cols; x++) {
+      terrain[x][y] = map(noise(xoff, yoff), 0, 1, -map(lightY, 0, height, 0,
+        1000), map(lightY, 0, height, 0, random(map(lightY, 0, height, 0,
+        128)) + 1000));
+      xoff += 0.1 + map(lightY, 0, height, 0, 0.4);
     }
-    yoff+=0.1+map(lightY,0,height,0,.4);
+    yoff += 0.1 + map(lightY, 0, height, 0, 0.4);
   }
   push();
-  translate(-width/3, -height-220, -1000); //-height/1.3
+  translate(-width / 3, -height - 220, -1000); //-height/1.3
   rotateY(radians(-30));
   moveLight();
   //print(terrain.length);
-  for(var y = 0; y < rows-1; ++y) {
+  for (var y = 0; y < rows - 1; ++y) {
     beginShape();
-    for(var x = 0; x < cols-1; ++x) {
-      vertex(x*scaler,y*scaler,terrain[x][y]);
-      vertex(x*scaler,(y+1)*scaler,terrain[x][y+1]);
+    for (var x = 0; x < cols - 1; ++x) {
+      vertex(x * scaler, y * scaler, terrain[x][y]);
+      vertex(x * scaler, (y + 1) * scaler, terrain[x][y + 1]);
     }
     endShape(CLOSE);
   }
   pop();
 
-  fill(map(lightY,0,height,0,255),random(map(lightY,0,height,0,64)),random(64)+64);
+  fill(map(lightY, 0, height, 0, 255), random(map(lightY, 0, height, 0, 64)),
+    random(64) + 64);
   /*
   textAlign(RIGHT);
   text(lightY, txtsize*4.75, height-txtsize*3);
@@ -77,22 +83,32 @@ function draw() {
   }
   */
 }
+
 function moveLight() {
-  if(lightXbit == false) {
-      if(lightX > width) lightXbit= !lightXbit;
-      if(lightX <= width) { lightX+=3; }
-    } else {
-      if(lightX <= 0) lightXbit= !lightXbit;
-      if(lightX > 0) { lightX-=3; }
+  if (lightXbit == false) {
+    if (lightX > width) lightXbit = !lightXbit;
+    if (lightX <= width) {
+      lightX += 3;
     }
-    if(lightYbit == false) {
-      if(lightY > height) lightYbit= !lightYbit;
-      if(lightY <= height) { lightY+=HALF_PI; }
-    } else {
-      if(lightY <= 0) lightYbit= !lightYbit;
-      if(lightY > 0) { lightY-=HALF_PI; }
+  } else {
+    if (lightX <= 0) lightXbit = !lightXbit;
+    if (lightX > 0) {
+      lightX -= 3;
     }
+  }
+  if (lightYbit == false) {
+    if (lightY > height) lightYbit = !lightYbit;
+    if (lightY <= height) {
+      lightY += HALF_PI;
+    }
+  } else {
+    if (lightY <= 0) lightYbit = !lightYbit;
+    if (lightY > 0) {
+      lightY -= HALF_PI;
+    }
+  }
 }
+
 function windowResized() {
   resizeCanvas(windowWidth, windowHeight);
 }
