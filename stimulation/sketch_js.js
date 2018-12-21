@@ -25,7 +25,8 @@ function setup() {
   textSize(txtsize);
   cols = w/scaler;
   rows = h/scaler;
-  createCanvas(screen.width,screen.height,WEBGL);
+  //createCanvas(screen.width,screen.height,WEBGL);
+  createCanvas(windowWidth, windowHeight, WEBGL);
   terrain = [];
   for (var j = 0; j < cols; j++) {
     terrain[j] = [];
