@@ -4,27 +4,25 @@ var myFont;
 function preload() {
   // Ensure the .ttf or .otf font stored in the assets directory
   // is loaded before setup() and draw() are called
-  myFont = loadFont("assets/centuryGoth.otf");
+  myFont = loadFont("assets/Roboto-Regular.ttf");
 }
-var txtsize = 30;
+var txtsize = 100;
 */
 var cols, rows;
 var scaler = 48;
 var w = 990;
 var h = 2000;
-//var r,g,b;
 var flying = 0.0;
 var pongVar = 1.0;
 var pongVarbit = false;
+//noSmooth();
 
 var terrain = [];
 var rot = 0.0;
 
 function setup() {
-  /*
-  textFont(myFont);
-  textSize(txtsize);
-  */
+  //textFont(myFont);
+  //textSize(txtsize);
   cols = w / scaler;
   rows = h / scaler;
   createCanvas(windowWidth, windowHeight, WEBGL);
@@ -36,6 +34,7 @@ function setup() {
 }
 
 function draw() {
+  noFill();
   background(255 - map(pongVar, 0, height, 0, 255), random(map(pongVar, 0,
     height,
     0, 17)) + 228 - map(pongVar, 0, height, 0, 228), random(map(pongVar, 0,
@@ -69,19 +68,25 @@ function draw() {
     endShape(CLOSE);
   }
   pop();
-  fill(map(pongVar, 0, height, 0, 255), random(map(pongVar, 0, height, 0, 64)),
+  fill(0);
+  strokeWeight(3);
+  stroke(map(pongVar, 0, height, 0, 255), random(map(pongVar, 0, height, 0, 64)),
     random(64) + 64);
+
   /*
-  textAlign(RIGHT);
-  text(pongVar, txtsize * 4.75, height - txtsize * 3);
-  textAlign(LEFT);
-  text("STIMULATION", txtsize, windowHeight - txtsize * 2);
-  if (pongVar > height / 2) {
-    fill(map(pongVar, 0, height, 128, 255), (map(pongVar, 0, height, 64, 128)),
-      random(64) + 64);
-    text('CAUTION', txtsize, height - txtsize);
-  }
-  */
+    textAlign(RIGHT);
+    text(pongVar, txtsize * 4.75, height - txtsize * 3);
+    textAlign(LEFT);
+    text("STIMULATION", txtsize, windowHeight - txtsize * 2);
+
+    //text("STIMULATION", 100, 100);
+
+    if (pongVar > height / 2) {
+      fill(map(pongVar, 0, height, 128, 255), (map(pongVar, 0, height, 64, 128)),
+        random(64) + 64);
+      text('CAUTION', txtsize, height - txtsize);
+    }
+    */
 }
 
 function pong() {
