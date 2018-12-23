@@ -1,13 +1,3 @@
-/*
-var myFont;
-
-function preload() {
-  // Ensure the .ttf or .otf font stored in the assets directory
-  // is loaded before setup() and draw() are called
-  myFont = loadFont("assets/Roboto-Regular.ttf");
-}
-var txtsize = 100;
-*/
 var cols, rows;
 var scaler = 48;
 var w = 990;
@@ -15,20 +5,23 @@ var h = 2000;
 var flying = 0.0;
 var pongVar = 1.0;
 var pongVarbit = false;
-//noSmooth();
 
 var terrain = [];
 var rot = 0.0;
 
 function setup() {
-  //textFont(myFont);
-  //textSize(txtsize);
   cols = w / scaler;
   rows = h / scaler;
   createCanvas(windowWidth, windowHeight, WEBGL);
   terrain = [];
+  oscArray = [];
   for (var j = 0; j < cols; j++) {
     terrain[j] = [];
+    oscArray[j] = new p5.Oscillator();
+    oscArray[j].setType('triangle');
+    oscArray[j].amp(0.0);
+    oscArray[j].freq(0);
+    oscArray[j].start();
   }
   frameRate(30);
 }
@@ -63,30 +56,19 @@ function draw() {
     beginShape();
     for (var x2 = 0; x2 < cols - 1; x2++) {
       vertex(x2 * scaler, y2 * scaler, terrain[x2][y2]);
+      oscArray[x2].freq(map(terrain[x2][y2], -100, 100, 60, 900));
+      oscArray[x2].amp(0.10);
       vertex(x2 * scaler, (y2 + 1) * scaler, terrain[x2][y2 + 1]);
+      //print(terrain[x2][y2]);
     }
     endShape(CLOSE);
   }
   pop();
+  //print(pongVar);
   fill(0);
   strokeWeight(3);
   stroke(map(pongVar, 0, height, 0, 255), random(map(pongVar, 0, height, 0, 64)),
     random(64) + 64);
-
-  /*
-    textAlign(RIGHT);
-    text(pongVar, txtsize * 4.75, height - txtsize * 3);
-    textAlign(LEFT);
-    text("STIMULATION", txtsize, windowHeight - txtsize * 2);
-
-    //text("STIMULATION", 100, 100);
-
-    if (pongVar > height / 2) {
-      fill(map(pongVar, 0, height, 128, 255), (map(pongVar, 0, height, 64, 128)),
-        random(64) + 64);
-      text('CAUTION', txtsize, height - txtsize);
-    }
-    */
 }
 
 function pong() {
