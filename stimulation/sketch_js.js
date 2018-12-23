@@ -9,19 +9,36 @@ var pongVarbit = false;
 var terrain = [];
 var rot = 0.0;
 
+//sound stuff
+var attackLevel = 0.01;
+var releaseLevel = 0;
+
+var attackTime = 0.6;
+var decayTime = 0.4;
+var susPercent = 0.2;
+var releaseTime = 0.7;
+
+var env;
+
 function setup() {
   cols = w / scaler;
   rows = h / scaler;
   createCanvas(windowWidth, windowHeight, WEBGL);
   terrain = [];
   oscArray = [];
+  reverb = new p5.Reverb();
+  env = new p5.Env();
+  env.setExp();
+  env.setADSR(attackTime, decayTime, susPercent, releaseTime);
+  env.setRange(attackLevel, releaseLevel);
   for (var j = 0; j < cols; j++) {
     terrain[j] = [];
     oscArray[j] = new p5.Oscillator();
-    oscArray[j].setType('triangle');
-    oscArray[j].amp(0.0);
+    oscArray[j].setType('sine');
+    oscArray[j].amp(env);
     oscArray[j].freq(0);
     oscArray[j].start();
+    reverb.process(oscArray[j], 10, 2);
   }
   frameRate(30);
 }
@@ -34,8 +51,9 @@ function draw() {
     height, 0, 63)) + 192 - map(pongVar, 0, height, 0, 192));
   stroke(map(pongVar, 0, height, 0, 255), random(map(pongVar, 0, height, 0, 64)) +
     0, random(64) + 64);
+
   //fill terrain values
-  flying -= 0.1 + map(pongVar, 0, height, 0, 0.4);
+  flying -= 0.01 + map(pongVar, 0, height, 0, 0.4);
   var yoff = flying;
   for (var y = 0; y < rows; y++) {
     var xoff = 0.0;
@@ -43,9 +61,9 @@ function draw() {
       terrain[x][y] = map(noise(xoff, yoff), 0, 1, -map(pongVar, 0, height, 0,
         1000), map(pongVar, 0, height, 0, random(map(pongVar, 0, height, 0,
         128)) + 1000));
-      xoff += 0.1 + map(pongVar, 0, height, 0, 0.4);
+      xoff += 0.01 + map(pongVar, 0, height, 0, 0.3);
     }
-    yoff += 0.1 + map(pongVar, 0, height, 0, 0.4);
+    yoff += 0.01 + map(pongVar, 0, height, 0, 0.3);
   }
   push();
   translate(-width / 2.1, -height - 200, -1000); //-height/1.3
@@ -53,11 +71,13 @@ function draw() {
   pong();
   //print(terrain.length);
   for (var y2 = 0; y2 < rows - 1; y2++) {
+    env.play();
     beginShape();
     for (var x2 = 0; x2 < cols - 1; x2++) {
       vertex(x2 * scaler, y2 * scaler, terrain[x2][y2]);
-      oscArray[x2].freq(map(terrain[x2][y2], -100, 100, 60, 900));
-      oscArray[x2].amp(0.10);
+      oscArray[x2].freq(map(terrain[x2][y2], -80, 80, 20, 1000));
+      //oscArray[x2].amp(map(y2, 0, rows, 0.00, 0.06));
+      oscArray[x2].pan(map(terrain[x2][y2], -80, 80, -1, 1));
       vertex(x2 * scaler, (y2 + 1) * scaler, terrain[x2][y2 + 1]);
       //print(terrain[x2][y2]);
     }
