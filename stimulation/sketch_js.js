@@ -1,5 +1,5 @@
 var cols, rows;
-var scaler = 48;
+var scaler = 64;
 var w = 990;
 var h = 2000;
 var flying = 0.0;
@@ -10,15 +10,16 @@ var terrain = [];
 var rot = 0.0;
 
 //sound stuff
-var attackLevel = 0.01;
-var releaseLevel = 0;
+var attackLevel = 0.02;
+var releaseLevel = 0.01;
 
-var attackTime = 0.6;
+var attackTime = 0.3;
 var decayTime = 0.4;
-var susPercent = 0.2;
-var releaseTime = 0.7;
+var susPercent = 0.5;
+var releaseTime = 0.4;
 
 var env;
+var filter;
 
 function setup() {
   cols = w / scaler;
@@ -26,11 +27,13 @@ function setup() {
   createCanvas(windowWidth, windowHeight, WEBGL);
   terrain = [];
   oscArray = [];
+  filter = new p5.LowPass();
   reverb = new p5.Reverb();
   env = new p5.Env();
   env.setExp();
   env.setADSR(attackTime, decayTime, susPercent, releaseTime);
   env.setRange(attackLevel, releaseLevel);
+  filter.freq(100);
   for (var j = 0; j < cols; j++) {
     terrain[j] = [];
     oscArray[j] = new p5.Oscillator();
@@ -38,9 +41,11 @@ function setup() {
     oscArray[j].amp(env);
     oscArray[j].freq(0);
     oscArray[j].start();
-    reverb.process(oscArray[j], 10, 2);
+    oscArray[j].connect(filter);
+    reverb.process(filter, 10, 2);
   }
-  frameRate(30);
+
+  frameRate(44.1);
 }
 
 function draw() {
@@ -79,6 +84,7 @@ function draw() {
       //oscArray[x2].amp(map(y2, 0, rows, 0.00, 0.06));
       oscArray[x2].pan(map(terrain[x2][y2], -80, 80, -1, 1));
       vertex(x2 * scaler, (y2 + 1) * scaler, terrain[x2][y2 + 1]);
+
       //print(terrain[x2][y2]);
     }
     endShape(CLOSE);
