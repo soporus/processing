@@ -12,14 +12,14 @@ function setup() {
   //kick
   drum = new SynthObject('drum', 'square');
   drum.osc.freq(0);
-  drum.Penv.setRange(400, 31);
-  drum.Penv.setADSR(0.0, 0.03, 0.05, 0.2);
+  drum.Penv.setRange(1200, 31);
+  drum.Penv.setADSR(0.0, 0.02, 0.05, 0.2);
   drum.filter.freq(120);
   drum.filter.res(1.5);
   //snare
   drum2 = new SynthObject('drum', 'triangle');
   drum2.osc.freq(0);
-  drum2.Penv.setRange(10000, 140);
+  drum2.Penv.setRange(10000, 150);
   drum2.Penv.setADSR(0.0, 0.01, 0.005, 0.2);
   drum2.filter.freq(200);
   drum2.filter.res(1.0);
