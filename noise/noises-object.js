@@ -3,6 +3,7 @@
 function SynthObject(tempsynthType,tempOsc) {
   //envelope
   //todo: remove passed env, replace with preset based on flag
+  this.freqValue = 0;
   this.channel = new p5.Gain();
   this.LFO1Bit = true;
   this.LFO1 = width/2;// modulator
@@ -10,6 +11,8 @@ function SynthObject(tempsynthType,tempOsc) {
   this.LFO2Bit = true;
   this.LFO2 = width/2;// modulator
   this.LFO2Speed = 0;
+  this.realLFO = new p5.Oscillator('sine');
+  this.realLFO.disconnect();
   this.synthType = tempsynthType;
   this.oscType = tempOsc;
   //noise has no pitch options
@@ -32,7 +35,7 @@ function SynthObject(tempsynthType,tempOsc) {
     this.Release = 0.3;
     this.AttackLvl = 300;
     this.ReleaseLvl = 50;
-    this.Aenv.setRange(0.3, 0.0);
+    this.Aenv.setRange(1, 0.0);
     //pitch envelope for drums that aren't noise based
     this.Penv.setExp('True');
     this.Penv.setADSR(this.Attack, this.Decay, this.Sustain, this.Release);
@@ -45,7 +48,7 @@ function SynthObject(tempsynthType,tempOsc) {
     this.Release = 0.8;
     this.AttackLvl = 400;
     this.ReleaseLvl = 400;
-    this.Aenv.setRange(0.1, 0.0);
+    this.Aenv.setRange(0.5, 0.0);
   }
   this.Aenv.setADSR(this.Attack, this.Decay, this.Sustain, this.Release);
 
@@ -62,6 +65,17 @@ function SynthObject(tempsynthType,tempOsc) {
   this.filter.disconnect();
   this.channel.setInput(this.filter);
   this.osc.start();
+  if(this.oscType !== 'noise') {
+    if(this.synthType === 'synth') {
+      this.realLFO.amp(random(0.25, 0.5));
+      this.realLFO.freq(random(0.1, 4.0));
+    } else {
+      this.realLFO.amp(random(100.0, 200.0));
+      this.realLFO.freq(random(1200.0, 4020.0));
+    }
+    this.realLFO.start();
+    this.osc.freq(this.realLFO);
+  }
   this.osc.amp(this.Aenv);
   this.trigger = function() {
     this.Aenv.play();

@@ -11,52 +11,55 @@ function setup() {
   compressor = new p5.Compressor();
   delay.setType(1);
   //kick
-  drum = new SynthObject('drum', 'square');
+  drum = new SynthObject('drum', 'triangle');
   drum.osc.freq(0);
-  drum.Penv.setRange(1200, 31);
-  drum.Penv.setADSR(0.0, 0.02, 0.05, 0.2);
-  drum.filter.freq(120);
-  drum.filter.res(1.5);
+  drum.Penv.setRange(2100, 70);
+  drum.realLFO.freq(350);
+  drum.realLFO.amp(77);
+  drum.Penv.setADSR(0.0, 0.01, 0.05, 0.02);
+  drum.filter.freq(210);
+  drum.filter.res(0.125);
   //snare
   drum2 = new SynthObject('drum', 'triangle');
   drum2.osc.freq(0);
-  drum2.Penv.setRange(10000, 150);
-  drum2.Penv.setADSR(0.0, 0.01, 0.005, 0.2);
-  drum2.filter.freq(200);
-  drum2.filter.res(1.0);
+  drum2.realLFO.freq(500);
+  drum2.realLFO.amp(67);
+  drum2.Penv.setRange(10000, 170);
+  drum2.Penv.setADSR(0.0, 0.005, 0.005, 0.01);
+  drum2.Aenv.setADSR(0.0, 0.12, 0.1, 0.1);
+  drum2.filter.freq(300);
+  drum2.filter.res(0.1);
   //noise
   drum3 = new SynthObject('drum', 'noise');
+  drum3.Aenv.setADSR(0.02, 0.075, 0.1, 0.25);
   //synth bass
   synth = new SynthObject('synth', 'pulse');
   synth.osc.freq(220);
   synth.LFO1Speed = 20;
-  synth.filter.freq(300);
+  synth.filter.freq(333);
   synth.filter.res(0.5);
-  synth.filter.amp(0.5);
   //synth mid
   synth2 = new SynthObject('synth', 'sawtooth');
   synth2.LFO1Speed = 10;
   synth2.osc.freq(0);
   synth2.filter.freq(750);
   synth2.filter.res(1);
-  synth2.filter.amp(0.5);
   synth2.osc.pan(-0.4);
   //synth high
   synth3 = new SynthObject('synth', 'sawtooth');
   synth3.LFO1Speed = 7;
   synth3.osc.freq(0);
   synth3.filter.freq(565);
-  synth3.filter.res(2);
-  synth3.filter.amp(0.4);
+  synth3.filter.res(1);
   synth3.osc.pan(0.4);
 
-  reverb.process(synth2.filter, 10, 1);
-  reverb.process(synth3.filter, 10, 1);
-  reverb.process(drum3.filter, 2, 8);
+  reverb.process(synth2.filter);
+  reverb.process(synth3.filter);
+  reverb.process(drum2.filter);
+  reverb.process(drum3.filter, 1, 8);
   reverb.disconnect();
-  // delay.process(drum2.filter, 0.025, 0.5, 900);
-  delay.process(synth2.filter, 0.2, 0.8, 1900);
-  delay.process(synth3.filter, 0.2, 0.8, 1900);
+  delay.process(synth2.filter);
+  delay.process(synth3.filter, 0.2, 0.7, 1900);
   delay.disconnect();
 
   drum.channel.connect(mainChannel);
@@ -68,7 +71,7 @@ function setup() {
   delay.connect(mainChannel);
   reverb.connect(mainChannel);
   //compressor process(src, [attack], [knee], [ratio], [threshold], [release])
-  compressor.process(mainChannel, 0.003, 35, 4, -60, 0.25);
+  compressor.process(mainChannel, 0.003, 35, 3, -45, 0.25);
 
   createCanvas(windowWidth, windowHeight, WEBGL);
   frameRate(30);
@@ -95,24 +98,25 @@ function draw() {
   }
   //noise
   if ((frameCount % 8) === 0 || (frameCount % 18) === 0) {
+    drum3.Aenv.setADSR(random(0.0, 0.075), 0.075, 0.05, random(0.25, 0.5));
     drum3.trigger();
   }
   //synth bass
   if (((frameCount % 40) === 0) || (frameCount % 64) === 0) {
-    freqValue = midiToFreq(random(scaleArray));
-    synth.osc.freq(freqValue / int(random(2, 3)));
+    synth.freqValue = float(midiToFreq(random(scaleArray)));
+    synth.osc.freq(synth.freqValue / int(random(2, 3)));
     synth.trigger();
   }
   //synth mid
   if (((frameCount % 48) === 0) || (frameCount % 56) === 0) {
-    freqValue = midiToFreq(random(scaleArray));
-    synth2.osc.freq(freqValue * int(random(2, 3)));
+    synth2.freqValue = midiToFreq(random(scaleArray));
+    synth2.osc.freq(synth2.freqValue / int(random(2, 3)));
     synth2.trigger();
   }
   //synth high
   if (((frameCount % 64) === 0) || (frameCount % 80) === 0) {
-    freqValue = midiToFreq(random(scaleArray));
-    synth3.osc.freq(freqValue);
+    synth3.freqValue = midiToFreq(random(scaleArray));
+    synth3.osc.freq(synth3.freqValue);
     synth3.trigger();
   }
   //draw filtered spectrum
