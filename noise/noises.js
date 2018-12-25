@@ -75,7 +75,7 @@ function setup() {
   //compressor process(src, [attack], [knee], [ratio], [threshold], [release])
   compressor.process(mainChannel, 0.003, 35, 3, -45, 0.25);
 
-  createCanvas(windowWidth, windowHeight, WEBGL);
+  createCanvas(windowWidth, windowHeight);
   frameRate(30);
   strokeWeight(2);
   fft = new p5.FFT(0.5, 32);
@@ -120,23 +120,23 @@ function draw() {
     synth3.osc.freq(synth3.freqValue);
     synth3.trigger();
   }
-  translate(-width / 2, -height / 2);
+//   translate(-width / 2, -height / 2);
   //draw waveform
   waveform = fft.waveform(synth.channel);
   // draw the shape of the waveform
-  var temploud = 10 + loudness.getLevel() * 200;
+  var temploud = 40 + loudness.getLevel() * 200;
   beginShape();
-  stroke(0, 192, 255);
+  stroke(temploud, 192, 255);
   fill(0, temploud, temploud);
   for (var i = 0; i < waveform.length; i++) {
     var x = map(i, 0, waveform.length, 0, width + width / waveform.length);
     var y = map(waveform[i], -1, 1, -height / 2, height / 2);
-    vertex(x, y + height / 4);
+    vertex(x, (y + height / 4));
   }
   endShape(CLOSE);
 
   //draw filtered spectrum
-  stroke(255, 0, 128);
+  stroke(255, temploud, 128);
   fill(temploud, 0, 0);
   spectrum = fft.analyze();
   for (var i = 0; i < spectrum.length; i++) {
