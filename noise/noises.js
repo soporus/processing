@@ -69,7 +69,7 @@ function setup() {
   delay.connect(mainChannel);
   reverb.connect(mainChannel);
   //compressor process(src, [attack], [knee], [ratio], [threshold], [release])
-  compressor.process(mainChannel, 0.003, 35, 4, -48, 0.25);
+  compressor.process(mainChannel, 0.003, 35, 4, -60, 0.25);
 
   createCanvas(windowWidth, windowHeight, WEBGL);
   frameRate(30);
