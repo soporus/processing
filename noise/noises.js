@@ -1,10 +1,12 @@
 var fft, analyzer, drum, drum2, drum3, synth, synth2, synth3, reverb, delay, compressor, mainChannel;
-
+var waveform;
 var spectrum;
 var scaleArray = [49, 52, 56, 58, 64, 68];
 var freqValue;
+var loudness;
 
 function setup() {
+  loudness = new p5.Amplitude();
   mainChannel = new p5.Gain();
   reverb = new p5.Reverb();
   delay = new p5.Delay();
@@ -75,19 +77,18 @@ function setup() {
 
   createCanvas(windowWidth, windowHeight, WEBGL);
   frameRate(30);
-  stroke(255, 0, 128);
-  noFill();
-  fft = new p5.FFT(0.7, 16);
+  strokeWeight(2);
+  fft = new p5.FFT(0.5, 32);
 }
 
 function draw() {
+  background(0);
   synth.LFO1Mod();
   synth2.LFO1Mod();
   synth3.LFO1Mod();
   synth.osc.width(map(synth.LFO1, 0, height, 0.33, 0.66));
   synth2.filter.freq(map(synth2.LFO1, 0, height, 500, 1000));
   synth3.filter.freq(map(synth3.LFO1, 0, height, 700, 1200));
-  background(0);
   //kick
   if ((frameCount % 32) === 0 || (frameCount % 72) === 0) {
     drum.trigger();
@@ -102,29 +103,45 @@ function draw() {
     drum3.trigger();
   }
   //synth bass
-  if (((frameCount % 40) === 0) || (frameCount % 64) === 0) {
+  if (((frameCount % 160) === 0) || (frameCount % 128) === 0) {
     synth.freqValue = float(midiToFreq(random(scaleArray)));
     synth.osc.freq(synth.freqValue / int(random(2, 3)));
     synth.trigger();
   }
   //synth mid
-  if (((frameCount % 48) === 0) || (frameCount % 56) === 0) {
+  if (((frameCount % 192) === 0) || (frameCount % 112) === 0) {
     synth2.freqValue = midiToFreq(random(scaleArray));
     synth2.osc.freq(synth2.freqValue / int(random(2, 3)));
     synth2.trigger();
   }
   //synth high
-  if (((frameCount % 64) === 0) || (frameCount % 80) === 0) {
+  if (((frameCount % 256) === 0) || (frameCount % 320) === 0) {
     synth3.freqValue = midiToFreq(random(scaleArray));
     synth3.osc.freq(synth3.freqValue);
     synth3.trigger();
   }
-  //draw filtered spectrum
   translate(-width / 2, -height / 2);
+  //draw waveform
+  waveform = fft.waveform(synth.channel);
+  // draw the shape of the waveform
+  var temploud = 10 + loudness.getLevel() * 200;
+  beginShape();
+  stroke(0, 192, 255);
+  fill(0, temploud, temploud);
+  for (var i = 0; i < waveform.length; i++) {
+    var x = map(i, 0, waveform.length, 0, width);
+    var y = map(waveform[i], -1, 1, -height / 2, height / 2);
+    vertex(x, y + height / 4);
+  }
+  endShape(CLOSE);
+
+  //draw filtered spectrum
+  stroke(255, 0, 128);
+  fill(temploud, 0, 0);
   spectrum = fft.analyze();
   for (var i = 0; i < spectrum.length; i++) {
     var x = map(i, 0, spectrum.length, 0, width);
-    var h = -height + map(spectrum[i], 0, 255, height, 0);
+    var h = -height + map(spectrum[i], 0, 255, height, height / 4);
     rect(x, height, width / spectrum.length, h);
   }
 }
