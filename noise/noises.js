@@ -1,7 +1,6 @@
 var fft, analyzer, drum, drum2, drum3, synth, synth2, synth3, reverb, delay, compressor, mainChannel;
 
 var spectrum;
-// var stepTaken = false;
 var scaleArray = [49, 52, 56, 58, 64, 68];
 var freqValue;
 
