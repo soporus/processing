@@ -7,7 +7,8 @@ var freqValue;
 
 function setup() {
   reverb = new p5.Reverb();
-  delay = new p5.Delay(1);
+  delay = new p5.Delay();
+  delay.setType(1);
   //kick
   drum = new SynthObject('drum', 'square');
   drum.osc.freq(0);
@@ -55,40 +56,40 @@ function setup() {
   delay.process(synth3.filter, 0.2, 0.8, 1900);
 
   createCanvas(windowWidth, windowHeight, WEBGL);
-  frameRate(64);
+  frameRate(30);
   stroke(255, 0, 128);
   fill(0, 64, 64);
-  fft = new p5.FFT(0.7, 32);
+  fft = new p5.FFT(0.7, 16);
 }
 
 function draw() {
   background(0);
   //kick
-  if ((frameCount % 64) === 0 || (frameCount % 144) === 0) {
+  if ((frameCount % 32) === 0 || (frameCount % 72) === 0) {
     drum.trigger();
   }
   //snare
-  if ((frameCount % 96) === 0) {
+  if ((frameCount % 48) === 0) {
     drum2.trigger();
   }
   //noise
-  if ((frameCount % 16) === 0 || (frameCount % 36) === 0) {
+  if ((frameCount % 8) === 0 || (frameCount % 18) === 0) {
     drum3.trigger();
   }
   //synth bass
-  if (((frameCount % 80) === 0) || (frameCount % 128) === 0) {
+  if (((frameCount % 40) === 0) || (frameCount % 64) === 0) {
     freqValue = midiToFreq(random(scaleArray));
     synth.osc.freq(freqValue / int(random(2, 3)));
     synth.trigger();
   }
   //synth mid
-  if (((frameCount % 96) === 0) || (frameCount % 112) === 0) {
+  if (((frameCount % 48) === 0) || (frameCount % 56) === 0) {
     freqValue = midiToFreq(random(scaleArray));
     synth2.osc.freq(freqValue * int(random(2, 3)));
     synth2.trigger();
   }
   //synth high
-  if (((frameCount % 128) === 0) || (frameCount % 160) === 0) {
+  if (((frameCount % 64) === 0) || (frameCount % 80) === 0) {
     freqValue = midiToFreq(random(scaleArray));
     synth3.osc.freq(freqValue);
     synth3.trigger();
