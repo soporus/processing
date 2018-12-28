@@ -1,5 +1,5 @@
 let cols, rows;
-let scaler = 64;
+let scaler = 96;
 let w = 990;
 let h = 2000;
 let flying = 0.0;
@@ -10,6 +10,7 @@ let terrain = [];
 let Volume = new Tone.Volume(-24)
 
 function setup() {
+  noSmooth();
   cols = w / scaler;
   rows = h / scaler;
   createCanvas(windowWidth, windowHeight, WEBGL);
@@ -25,10 +26,12 @@ function setup() {
   }
 
   frameRate(30);
+
+  noFill();
+  strokeWeight(8);
 }
 
 function draw() {
-  noFill();
   background(255 - map(pongVar, 0, height, 0, 255), random(map(pongVar, 0,
     height,
     0, 17)) + 228 - map(pongVar, 0, height, 0, 228), random(map(pongVar, 0,
@@ -53,9 +56,9 @@ function draw() {
   translate(-width / 2.1, -height - 200, -1000); //-height/1.3
   rotateY(radians(-30));
   pong();
-  for (let y2 = 0; y2 < rows - 1; y2++) {
+  for (let y2 = 0; y2 < rows; y2++) {
     beginShape();
-    for (let x2 = 0; x2 < cols - 1; x2++) {
+    for (let x2 = 0; x2 < cols; x2++) {
       vertex(x2 * scaler, y2 * scaler, terrain[x2][y2]);
       oscArray[x2].setNote(map(terrain[x2][y2], -80, 80, 20, 1000));
       vertex(x2 * scaler, (y2 + 1) * scaler, terrain[x2][y2 + 1]);
@@ -63,9 +66,7 @@ function draw() {
     endShape(CLOSE);
   }
   pop();
-  //print(pongVar);
-  fill(0);
-  strokeWeight(3);
+
   stroke(map(pongVar, 0, height, 0, 255), random(map(pongVar, 0, height, 0, 64)),
     random(64) + 64);
 }
