@@ -19,9 +19,8 @@ function setup() {
   for (let j = 0; j < cols; j++) {
     terrain[j] = [];
     oscArray[j] = new Tone.Synth().chain(Volume, Tone.Master);
-    // oscArray[j].frequency = 0;
     oscArray[j].portamento = 0.03;
-    oscArray[j].envelope = [0.03, 1, 1, 1];
+    oscArray[j].envelope = [1, 1, 1, 1];
     oscArray[j].triggerAttack();
   }
 
@@ -54,7 +53,6 @@ function draw() {
   translate(-width / 2.1, -height - 200, -1000); //-height/1.3
   rotateY(radians(-30));
   pong();
-  //print(terrain.length);
   for (let y2 = 0; y2 < rows - 1; y2++) {
     beginShape();
     for (let x2 = 0; x2 < cols - 1; x2++) {
