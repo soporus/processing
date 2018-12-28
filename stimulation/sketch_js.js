@@ -67,8 +67,7 @@ function draw() {
   }
   pop();
 
-  stroke(map(pongVar, 0, height, 0, 255), random(map(pongVar, 0, height, 0, 64)),
-    random(64) + 64);
+  // stroke(map(pongVar, 0, height, 0, 255), random(map(pongVar, 0, height, 0, 64)),random(64) + 64);
 }
 
 function pong() {
