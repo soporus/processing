@@ -1,25 +1,13 @@
-var cols, rows;
-var scaler = 64;
-var w = 990;
-var h = 2000;
-var flying = 0.0;
-var pongVar = 1.0;
-var pongVarbit = false;
+let cols, rows;
+let scaler = 64;
+let w = 990;
+let h = 2000;
+let flying = 0.0;
+let pongVar = 1.0;
+let pongVarbit = false;
 
-var terrain = [];
-var rot = 0.0;
-
-//sound stuff
-var attackLevel = 0.02;
-var releaseLevel = 0.01;
-
-var attackTime = 0.3;
-var decayTime = 0.4;
-var susPercent = 0.5;
-var releaseTime = 0.4;
-
-var env;
-var filter;
+let terrain = [];
+let Volume = new Tone.Volume(-24)
 
 function setup() {
   cols = w / scaler;
@@ -27,25 +15,17 @@ function setup() {
   createCanvas(windowWidth, windowHeight, WEBGL);
   terrain = [];
   oscArray = [];
-  filter = new p5.LowPass();
-  reverb = new p5.Reverb();
-  env = new p5.Env();
-  env.setExp();
-  env.setADSR(attackTime, decayTime, susPercent, releaseTime);
-  env.setRange(attackLevel, releaseLevel);
-  filter.freq(100);
-  for (var j = 0; j < cols; j++) {
+
+  for (let j = 0; j < cols; j++) {
     terrain[j] = [];
-    oscArray[j] = new p5.Oscillator();
-    oscArray[j].setType('sine');
-    oscArray[j].amp(env);
-    oscArray[j].freq(0);
-    oscArray[j].start();
-    oscArray[j].connect(filter);
-    reverb.process(filter, 10, 2);
+    oscArray[j] = new Tone.Synth().chain(Volume, Tone.Master);
+    // oscArray[j].frequency = 0;
+    oscArray[j].portamento = 0.03;
+    oscArray[j].envelope = [0.03, 1, 1, 1];
+    oscArray[j].triggerAttack();
   }
 
-  frameRate(44.1);
+  frameRate(30);
 }
 
 function draw() {
@@ -59,10 +39,10 @@ function draw() {
 
   //fill terrain values
   flying -= 0.01 + map(pongVar, 0, height, 0, 0.4);
-  var yoff = flying;
-  for (var y = 0; y < rows; y++) {
-    var xoff = 0.0;
-    for (var x = 0; x < cols; x++) {
+  let yoff = flying;
+  for (let y = 0; y < rows; y++) {
+    let xoff = 0.0;
+    for (let x = 0; x < cols; x++) {
       terrain[x][y] = map(noise(xoff, yoff), 0, 1, -map(pongVar, 0, height, 0,
         1000), map(pongVar, 0, height, 0, random(map(pongVar, 0, height, 0,
         128)) + 1000));
@@ -75,17 +55,12 @@ function draw() {
   rotateY(radians(-30));
   pong();
   //print(terrain.length);
-  for (var y2 = 0; y2 < rows - 1; y2++) {
-    env.play();
+  for (let y2 = 0; y2 < rows - 1; y2++) {
     beginShape();
-    for (var x2 = 0; x2 < cols - 1; x2++) {
+    for (let x2 = 0; x2 < cols - 1; x2++) {
       vertex(x2 * scaler, y2 * scaler, terrain[x2][y2]);
-      oscArray[x2].freq(map(terrain[x2][y2], -80, 80, 20, 1000));
-      //oscArray[x2].amp(map(y2, 0, rows, 0.00, 0.06));
-      oscArray[x2].pan(map(terrain[x2][y2], -80, 80, -1, 1));
+      oscArray[x2].setNote(map(terrain[x2][y2], -80, 80, 20, 1000));
       vertex(x2 * scaler, (y2 + 1) * scaler, terrain[x2][y2 + 1]);
-
-      //print(terrain[x2][y2]);
     }
     endShape(CLOSE);
   }
@@ -98,13 +73,17 @@ function draw() {
 }
 
 function pong() {
-  if (pongVarbit == false) {
-    if (pongVar > height) pongVarbit = !pongVarbit;
+  if (pongVarbit === false) {
+    if (pongVar > height) {
+      pongVarbit = !pongVarbit;
+    }
     if (pongVar <= height) {
       pongVar += HALF_PI;
     }
   } else {
-    if (pongVar <= 0) pongVarbit = !pongVarbit;
+    if (pongVar <= 0) {
+      pongVarbit = !pongVarbit;
+    }
     if (pongVar > 0) {
       pongVar -= HALF_PI;
     }
@@ -113,4 +92,12 @@ function pong() {
 
 function windowResized() {
   resizeCanvas(windowWidth, windowHeight);
+}
+
+function mousePressed() {
+  frameRate(0);
+}
+
+function mouseReleased() {
+  frameRate(30);
 }
