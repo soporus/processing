@@ -1,30 +1,20 @@
 let time = new Tone.Time();
-compress = new Tone.Compressor(-48, 4);
+let compress = new Tone.Compressor(-48, 4);
 
 let Volume = new Tone.Volume(-6);
-let verb = new Tone.Freeverb();
-verb.roomSize.value = 0.5;
-verb.dampening.value = 3000;
-verb.wet.value = 0.25;
-verb.disconnect();
+// let verb = new Tone.Freeverb();
+// verb.roomSize.value = 0.5;
+// verb.dampening.value = 3000;
+// verb.wet.value = 0.25;
+// verb.disconnect();
 let cheby = new Tone.Chebyshev(7);
 let feedbackDelay = new Tone.FeedbackDelay({
-	"delayTime": "6n",
-	"feedback": 0.25,
-	"wet": 0.25
-});
-feedbackDelay.disconnect();
-let feedbackDelay2 = new Tone.FeedbackDelay({
 	"delayTime": "8n",
 	"feedback": 0.83,
 	"maxDelay": 1,
 	"wet": 0.5
 });
-feedbackDelay2.disconnect();
-
-let noise1 = new Tone.NoiseSynth().chain(Volume, compress, Tone.Master);
-// noise1.volume.value = -3;
-noise1.sync();
+feedbackDelay.disconnect();
 
 let drum1 = new Tone.MembraneSynth().chain(cheby, Volume, compress, Tone.Master);
 drum1.oscillator.type = 'sine';
@@ -38,14 +28,14 @@ drum2.envelope.sustain = 0.2;
 drum2.envelope.release = 0.2;
 drum2.sync();
 
-let hat = new Tone.MetalSynth().chain(verb, Volume, compress, Tone.Master);
+let hat = new Tone.MetalSynth().chain(Volume, compress, Tone.Master);
 hat.envelope.attack = 0.01;
 hat.envelope.decay = 0.1;
 hat.envelope.sustain = 0.05;
 hat.envelope.release = 1;
 hat.volume.value = -18;
 hat.sync();
-let synth = new Tone.MonoSynth().chain(feedbackDelay, verb, Volume, compress, Tone.Master);
+let synth = new Tone.MonoSynth().chain(Volume, compress, Tone.Master);
 // synthSetup();
 synth.oscillator.type = "sawtooth";
 synth.envelope = [1, 2, 0.3, 10];
@@ -58,9 +48,9 @@ synth.filterEnvelope.octaves = 8;
 synth.filterEnvelope.decay = 5;
 synth.filterEnvelope.sustain = 0.75;
 synth.filterEnvelope.release = 10;
-synth.volume.value = -18;
+synth.volume.value = -12;
 synth.sync();
-let synth2 = new Tone.MonoSynth().chain(feedbackDelay2, verb, Volume, compress, Tone.Master);
+let synth2 = new Tone.MonoSynth().chain(feedbackDelay, Volume, compress, Tone.Master);
 synth2.oscillator.type = "sawtooth";
 synth2.envelope = [0.02, 0.2, 0.3, 1];
 synth2.filterEnvelope.attack = 0.02;
@@ -71,7 +61,7 @@ synth2.filter.Q = 0.5;
 synth2.filter.type = 'lowpass';
 synth2.filter.rolloff = -12;
 synth2.filterEnvelope.baseFrequency = 100;
-synth2.volume.value = -18;
+synth2.volume.value = -12;
 synth2.sync();
 let synthPattern = new Tone.Pattern(function(time, note) {
 	synth.detune = random(10.0);
@@ -88,21 +78,16 @@ let synth2Pattern = new Tone.Pattern(function(time, note) {
 	"upDown");
 synth2Pattern.interval = "2n";
 synth2Pattern.probability = 0.75;
-let noise1Pattern = new Tone.Pattern(function(time, note) {
-	noise1.triggerAttackRelease();
-});
-noise1Pattern.interval = "32n";
-noise1Pattern.probability = 0.5;
 
 let drum1Pattern = new Tone.Pattern(function(time, note) {
-		cheby.order = int(random(1, 5));
+		cheby.order = int(random(1, 4));
 		drum1.pitchDecay = random(0.001, 0.01);
 		drum1.octaves = random(6, 10);
-		drum1.triggerAttackRelease(note, "32n");
-	}, ["D3", "Gb3", "D4", "A4"],
+		drum1.triggerAttackRelease(note, "16n");
+	}, ["D3", "Gb3"],
 	"random");
-drum1Pattern.interval = "16n";
-drum1Pattern.probability = 0.33;
+drum1Pattern.interval = "8n";
+drum1Pattern.probability = 0.5;
 
 let drum2Pattern = new Tone.Pattern(function(time, note) {
 	drum2.pitchDecay = random(0.02, 0.055);
@@ -132,7 +117,7 @@ function setup() {
 	drum1Pattern.start(0);
 	drum2Pattern.start(0);
 	hatPattern.start(0);
-	noise1Pattern.start(0);
+	Tone.Transport.latencyHint = 'playback';
 	Tone.Transport.start();
 	frameRate(30);
 }
