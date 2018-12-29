@@ -1,20 +1,19 @@
 let time = new Tone.Time();
+compress = new Tone.Compressor(-48, 4);
 
-let Volume = new Tone.Volume(-12);
+let Volume = new Tone.Volume(-6);
 let verb = new Tone.Freeverb();
 verb.roomSize.value = 0.5;
 verb.dampening.value = 3000;
 verb.wet.value = 0.25;
 verb.disconnect();
 let cheby = new Tone.Chebyshev(7);
-let feedbackDelay = new Tone.PingPongDelay({
+let feedbackDelay = new Tone.FeedbackDelay({
 	"delayTime": "6n",
 	"feedback": 0.25,
 	"wet": 0.25
 });
 feedbackDelay.disconnect();
-let chorus1 = new Tone.Chorus(3, 3, 0.5, 'sine', 180);
-chorus1.wet.value = 0.5;
 let feedbackDelay2 = new Tone.FeedbackDelay({
 	"delayTime": "8n",
 	"feedback": 0.83,
@@ -23,30 +22,30 @@ let feedbackDelay2 = new Tone.FeedbackDelay({
 });
 feedbackDelay2.disconnect();
 
-let noise1 = new Tone.NoiseSynth().chain(Volume, Tone.Master);
+let noise1 = new Tone.NoiseSynth().chain(Volume, compress, Tone.Master);
 // noise1.volume.value = -3;
 noise1.sync();
 
-let drum1 = new Tone.MembraneSynth().chain(cheby, Volume, Tone.Master);
+let drum1 = new Tone.MembraneSynth().chain(cheby, Volume, compress, Tone.Master);
 drum1.oscillator.type = 'sine';
 drum1.envelope.sustain = 0.25;
 drum1.envelope.release = 0.75;
 drum1.sync();
 
-let drum2 = new Tone.MembraneSynth().chain(Volume, Tone.Master);
+let drum2 = new Tone.MembraneSynth().chain(Volume, compress, Tone.Master);
 drum2.oscillator.type = 'sine';
 drum2.envelope.sustain = 0.2;
 drum2.envelope.release = 0.2;
 drum2.sync();
 
-let hat = new Tone.MetalSynth().chain(verb, Volume, Tone.Master);
+let hat = new Tone.MetalSynth().chain(verb, Volume, compress, Tone.Master);
 hat.envelope.attack = 0.01;
 hat.envelope.decay = 0.1;
 hat.envelope.sustain = 0.05;
 hat.envelope.release = 1;
 hat.volume.value = -18;
 hat.sync();
-let synth = new Tone.MonoSynth().chain(chorus1, feedbackDelay, verb, Volume, Tone.Master);
+let synth = new Tone.MonoSynth().chain(feedbackDelay, verb, Volume, compress, Tone.Master);
 // synthSetup();
 synth.oscillator.type = "sawtooth";
 synth.envelope = [1, 2, 0.3, 10];
@@ -61,7 +60,7 @@ synth.filterEnvelope.sustain = 0.75;
 synth.filterEnvelope.release = 10;
 synth.volume.value = -18;
 synth.sync();
-let synth2 = new Tone.MonoSynth().chain(feedbackDelay2, verb, Volume, Tone.Master);
+let synth2 = new Tone.MonoSynth().chain(feedbackDelay2, verb, Volume, compress, Tone.Master);
 synth2.oscillator.type = "sawtooth";
 synth2.envelope = [0.02, 0.2, 0.3, 1];
 synth2.filterEnvelope.attack = 0.02;
