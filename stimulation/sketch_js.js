@@ -1,13 +1,16 @@
 let cols, rows;
-let scaler = 96;
-let w = 990;
-let h = 2000;
+const scaler = 96;
+const w = 990;
+const h = 2000;
 let flying = 0.0;
 let pongVar = 1.0;
 let pongVarbit = false;
-
+const time = new Tone.Time();
 let terrain = [];
-let Volume = new Tone.Volume(-24)
+const Volume = new Tone.Volume(-24)
+  //just intoned C Dorian : c, d, d#, f, g, a, a#
+const baseFreq = [1, 1.2000000, 1.3333333, 1.6666667, 2.0000000, 2.4000000, 2.6666667, 3.6000000, 4.5000000,
+  5.3333333, 6.6666667];
 
 function setup() {
   noSmooth();
@@ -17,10 +20,11 @@ function setup() {
   terrain = [];
   oscArray = [];
 
-  for (let j = 0; j < cols; j++) {
+  for (let j = 0; j <= cols; j++) {
     terrain[j] = [];
     oscArray[j] = new Tone.Synth().chain(Volume, Tone.Master);
-    oscArray[j].portamento = 0.03;
+    oscArray[j].sync();
+    oscArray[j].portamento = 0.03333333333;
     oscArray[j].envelope = [1, 1, 1, 1];
     oscArray[j].triggerAttack();
   }
@@ -29,6 +33,8 @@ function setup() {
 
   noFill();
   strokeWeight(8);
+  //Tone.Transport.latencyHint = 'playback';
+  Tone.Transport.start();
 }
 
 function draw() {
@@ -53,14 +59,20 @@ function draw() {
     yoff += 0.01 + map(pongVar, 0, height, 0, 0.3);
   }
   push();
-  translate(-width / 2.1, -height - 200, -1000); //-height/1.3
+  translate(-width / 2.1, -height - 200, -1000);
+  // translate(-width / 1.5, -height / 2, -50); //-height/1.3
   rotateY(radians(-30));
+  // rotateX(radians(-45));
   pong();
+  beginShape();
   for (let y2 = 0; y2 < rows; y2++) {
-    beginShape();
+    let a;
     for (let x2 = 0; x2 < cols; x2++) {
       vertex(x2 * scaler, y2 * scaler, terrain[x2][y2]);
-      oscArray[x2].setNote(map(terrain[x2][y2], -80, 80, 20, 1000));
+      console.log(a = baseFreq[x2] * map(terrain[x2][y2], -300, 1000, 60, 400));
+      // oscArray[x2].setNote(map(terrain[x2][y2], -300, 1000, int(baseFreq[x2] * 60.0), int(baseFreq[x2] *
+      //   1200.0)));
+      oscArray[x2].frequency.exponentialRampToValueAtTime(a, time + 0.03333333);
       vertex(x2 * scaler, (y2 + 1) * scaler, terrain[x2][y2 + 1]);
     }
     endShape(CLOSE);
