@@ -1,4 +1,4 @@
-/*! p5.js v0.7.2 December 25, 2018 */
+/*! p5.js v0.7.2 December 30, 2018 */
 (function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.p5 = f()}})(function(){var define,module,exports;return (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(_dereq_,module,exports){
 module.exports={
     "project": {
@@ -7177,7 +7177,7 @@ module.exports={
             "itemtype": "method",
             "name": "preload",
             "example": [
-                "\n<div><code>\nvar img;\nvar c;\nfunction preload() {\n  // preload() runs once\n  img = loadImage('assets/laDefense.jpg');\n}\n\nfunction setup() {\n  // setup() waits until preload() is done\n  img.loadPixels();\n  // get color of middle pixel\n  c = img.get(img.width / 2, img.height / 2);\n}\n\nfunction draw() {\n  background(c);\n  image(img, 25, 25, 50, 50);\n}\n</code></div>"
+                "\n<div><code>\nlet img;\nlet c;\nfunction preload() {\n  // preload() runs once\n  img = loadImage('assets/laDefense.jpg');\n}\n\nfunction setup() {\n  // setup() waits until preload() is done\n  img.loadPixels();\n  // get color of middle pixel\n  c = img.get(img.width / 2, img.height / 2);\n}\n\nfunction draw() {\n  background(c);\n  image(img, 25, 25, 50, 50);\n}\n</code></div>"
             ],
             "alt": "nothing displayed",
             "class": "p5",
@@ -7191,7 +7191,7 @@ module.exports={
             "itemtype": "method",
             "name": "setup",
             "example": [
-                "\n<div><code>\nvar a = 0;\n\nfunction setup() {\n  background(0);\n  noStroke();\n  fill(102);\n}\n\nfunction draw() {\n  rect(a++ % width, 10, 2, 80);\n}\n</code></div>"
+                "\n<div><code>\nlet a = 0;\n\nfunction setup() {\n  background(0);\n  noStroke();\n  fill(102);\n}\n\nfunction draw() {\n  rect(a++ % width, 10, 2, 80);\n}\n</code></div>"
             ],
             "alt": "nothing displayed",
             "class": "p5",
@@ -7205,7 +7205,7 @@ module.exports={
             "itemtype": "method",
             "name": "draw",
             "example": [
-                "\n<div><code>\nvar yPos = 0;\nfunction setup() {\n  // setup() runs once\n  frameRate(30);\n}\nfunction draw() {\n  // draw() loops forever, until stopped\n  background(204);\n  yPos = yPos - 1;\n  if (yPos < 0) {\n    yPos = height;\n  }\n  line(0, yPos, width, yPos);\n}\n</code></div>"
+                "\n<div><code>\nlet yPos = 0;\nfunction setup() {\n  // setup() runs once\n  frameRate(30);\n}\nfunction draw() {\n  // draw() loops forever, until stopped\n  background(204);\n  yPos = yPos - 1;\n  if (yPos < 0) {\n    yPos = height;\n  }\n  line(0, yPos, width, yPos);\n}\n</code></div>"
             ],
             "alt": "nothing displayed",
             "class": "p5",
@@ -7885,7 +7885,7 @@ module.exports={
             "itemtype": "method",
             "name": "noLoop",
             "example": [
-                "\n<div><code>\nfunction setup() {\n  createCanvas(100, 100);\n  background(200);\n  noLoop();\n}\n\nfunction draw() {\n  line(10, 10, 90, 90);\n}\n</code></div>\n\n<div><code>\nvar x = 0;\nfunction setup() {\n  createCanvas(100, 100);\n}\n\nfunction draw() {\n  background(204);\n  x = x + 0.1;\n  if (x > width) {\n    x = 0;\n  }\n  line(x, 0, x, height);\n}\n\nfunction mousePressed() {\n  noLoop();\n}\n\nfunction mouseReleased() {\n  loop();\n}\n</code></div>"
+                "\n<div><code>\nfunction setup() {\n  createCanvas(100, 100);\n  background(200);\n  noLoop();\n}\n\nfunction draw() {\n  line(10, 10, 90, 90);\n}\n</code></div>\n\n<div><code>\nlet x = 0;\nfunction setup() {\n  createCanvas(100, 100);\n}\n\nfunction draw() {\n  background(204);\n  x = x + 0.1;\n  if (x > width) {\n    x = 0;\n  }\n  line(x, 0, x, height);\n}\n\nfunction mousePressed() {\n  noLoop();\n}\n\nfunction mouseReleased() {\n  loop();\n}\n</code></div>"
             ],
             "alt": "113 pixel long line extending from top-left to bottom right of canvas.\nhorizontal line moves slowly from left. Loops but stops on mouse press.",
             "class": "p5",
@@ -7899,7 +7899,7 @@ module.exports={
             "itemtype": "method",
             "name": "loop",
             "example": [
-                "\n<div><code>\nvar x = 0;\nfunction setup() {\n  createCanvas(100, 100);\n  noLoop();\n}\n\nfunction draw() {\n  background(204);\n  x = x + 0.1;\n  if (x > width) {\n    x = 0;\n  }\n  line(x, 0, x, height);\n}\n\nfunction mousePressed() {\n  loop();\n}\n\nfunction mouseReleased() {\n  noLoop();\n}\n</code></div>"
+                "\n<div><code>\nlet x = 0;\nfunction setup() {\n  createCanvas(100, 100);\n  noLoop();\n}\n\nfunction draw() {\n  background(204);\n  x = x + 0.1;\n  if (x > width) {\n    x = 0;\n  }\n  line(x, 0, x, height);\n}\n\nfunction mousePressed() {\n  loop();\n}\n\nfunction mouseReleased() {\n  noLoop();\n}\n</code></div>"
             ],
             "alt": "horizontal line moves slowly from left. Loops but stops on mouse press.",
             "class": "p5",
@@ -7949,7 +7949,7 @@ module.exports={
                 }
             ],
             "example": [
-                "\n <div><code>\n var x = 0;\nfunction setup() {\n   createCanvas(100, 100);\n   noLoop();\n }\nfunction draw() {\n   background(204);\n   line(x, 0, x, height);\n }\nfunction mousePressed() {\n   x += 1;\n   redraw();\n }\n </code></div>\n<div class='norender'><code>\n var x = 0;\nfunction setup() {\n   createCanvas(100, 100);\n   noLoop();\n }\nfunction draw() {\n   background(204);\n   x += 1;\n   line(x, 0, x, height);\n }\nfunction mousePressed() {\n   redraw(5);\n }\n </code></div>"
+                "\n <div><code>\n let x = 0;\nfunction setup() {\n   createCanvas(100, 100);\n   noLoop();\n }\nfunction draw() {\n   background(204);\n   line(x, 0, x, height);\n }\nfunction mousePressed() {\n   x += 1;\n   redraw();\n }\n </code></div>\n<div class='norender'><code>\n let x = 0;\nfunction setup() {\n   createCanvas(100, 100);\n   noLoop();\n }\nfunction draw() {\n   background(204);\n   x += 1;\n   line(x, 0, x, height);\n }\nfunction mousePressed() {\n   redraw(5);\n }\n </code></div>"
             ],
             "alt": "black line on far left of canvas\n black line on far left of canvas",
             "class": "p5",
@@ -49182,8 +49182,8 @@ var p5 = function(sketch, node, sync) {
    * @method preload
    * @example
    * <div><code>
-   * var img;
-   * var c;
+   * let img;
+   * let c;
    * function preload() {
    *   // preload() runs once
    *   img = loadImage('assets/laDefense.jpg');
@@ -49220,7 +49220,7 @@ var p5 = function(sketch, node, sync) {
    * @method setup
    * @example
    * <div><code>
-   * var a = 0;
+   * let a = 0;
    *
    * function setup() {
    *   background(0);
@@ -49268,7 +49268,7 @@ var p5 = function(sketch, node, sync) {
    * @method draw
    * @example
    * <div><code>
-   * var yPos = 0;
+   * let yPos = 0;
    * function setup() {
    *   // setup() runs once
    *   frameRate(30);
@@ -55464,7 +55464,7 @@ var p5 = _dereq_('./main');
  * </code></div>
  *
  * <div><code>
- * var x = 0;
+ * let x = 0;
  * function setup() {
  *   createCanvas(100, 100);
  * }
@@ -55503,7 +55503,7 @@ p5.prototype.noLoop = function() {
  * @method loop
  * @example
  * <div><code>
- * var x = 0;
+ * let x = 0;
  * function setup() {
  *   createCanvas(100, 100);
  *   noLoop();
@@ -55689,7 +55689,7 @@ p5.prototype.pop = function() {
  * @param  {Integer} [n] Redraw for n-times. The default value is 1.
  * @example
  * <div><code>
- * var x = 0;
+ * let x = 0;
  *
  * function setup() {
  *   createCanvas(100, 100);
@@ -55708,7 +55708,7 @@ p5.prototype.pop = function() {
  * </code></div>
  *
  * <div class='norender'><code>
- * var x = 0;
+ * let x = 0;
  *
  * function setup() {
  *   createCanvas(100, 100);
@@ -79183,11 +79183,6 @@ p5.RendererGL.prototype.vertex = function(x, y) {
         u /= this.textureImage.width;
         v /= this.textureImage.height;
       }
-    } else {
-      console.warn(
-        'You must first call texture() before using' +
-          ' vertex() with image based u and v coordinates'
-      );
     }
   }
 
