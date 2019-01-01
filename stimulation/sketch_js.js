@@ -1,4 +1,4 @@
-let img1, img2, img3, img4;
+let img1, vid1;
 let u = false;
 let v = false;
 let Boost = false;
@@ -18,15 +18,14 @@ let moonRotation = 0.0;
 // let pongVarbit = false;
 let terrain = [];
 
-function setup() {
+function preload() {
   img1 = loadImage("assets/fract-1.png");
-  // img2 = loadImage("assets/fract-2.png");
-  // img3 = loadImage("assets/fract-3.png");
-  // img4 = loadImage("assets/moon_map_mercator.jpg");
-  // img4 = loadImage("assets/enceladus_map-lo.jpg");
-  img4 = loadImage("assets/europa-map.jpg");
+  vid1 = createVideo('assets/diff2.mp4');
+  vid1.hide();
+  vid1.loop();
+}
 
-
+function setup() {
   createCanvas(windowWidth, windowHeight, WEBGL);
   textureMode(NORMAL);
   terrain = [];
@@ -82,11 +81,12 @@ function draw() {
   ambientLight(0, 192, 228);
   translate(0, -700, -2500);
 
-  rotateZ(moonRotation -= 0.002);
-  rotateX(moonRotation);
-
-  texture(img4);
-  sphere(width);
+  rotateZ(moonRotation -= 0.001);
+  // rotateX(moonRotation);
+  rotateZ(moonRotation);
+  rotateY(moonRotation)
+  texture(vid1);
+  sphere(width, 24, 24);
   pop();
 }
 
