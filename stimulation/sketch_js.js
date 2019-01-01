@@ -23,7 +23,6 @@ function preload() {
   vid1 = createVideo('assets/diff2.mp4');
   vid1.loop();
   vid1.hide();
-
 }
 
 function setup() {
@@ -105,10 +104,3 @@ function mousePressed() {
   // }
   return false;
 }
-
-// function mouseReleased() {
-//   // frameRate(30);
-//   Boost = false;
-//   BoostSpeed = 1.0;
-//
-// }
