@@ -13,6 +13,7 @@ const fps = 30;
 // const ramptime = 1.0 / fps;
 
 let flying = 0.0;
+let moonRotation = 0.0;
 // let pongVar = 1.0;
 // let pongVarbit = false;
 let terrain = [];
@@ -58,10 +59,10 @@ function draw() {
 
   for (let y = 0; y < rows - 1; y++) {
     texture(img1);
-
     beginShape(TRIANGLE_STRIP);
     for (let x = 0; x < cols; x++) {
       vertex(x * scaler, y * scaler, terrain[x][y], !u, v);
+      //glitch texture on click
       // if (Boost === true) {
       //   u = Math.random() < 0.5;
       // }
@@ -81,31 +82,13 @@ function draw() {
   ambientLight(0, 192, 228);
   translate(0, -700, -2500);
 
-  rotateZ(flying / 8);
-  rotateX(flying / 4);
+  rotateZ(moonRotation -= 0.002);
+  rotateX(moonRotation);
 
   texture(img4);
   sphere(width);
   pop();
 }
-
-// function pong() {
-//   if (pongVarbit === false) {
-//     if (pongVar > height) {
-//       pongVarbit = !pongVarbit;
-//     }
-//     if (pongVar <= height) {
-//       pongVar += HALF_PI;
-//     }
-//   } else {
-//     if (pongVar <= 0) {
-//       pongVarbit = !pongVarbit;
-//     }
-//     if (pongVar > 0) {
-//       pongVar -= HALF_PI;
-//     }
-//   }
-// }
 
 function windowResized() {
   resizeCanvas(windowWidth, windowHeight);
