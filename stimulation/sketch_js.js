@@ -21,8 +21,9 @@ let terrain = [];
 function preload() {
   img1 = loadImage("assets/fract-1.png");
   vid1 = createVideo('assets/diff2.mp4');
-  vid1.hide();
   vid1.loop();
+  vid1.hide();
+
 }
 
 function setup() {
@@ -39,6 +40,7 @@ function setup() {
 }
 
 function draw() {
+  BoostSpeed = map(mouseY, 0, windowHeight, -3.2, 3.2);
   //terrain generation
   flying -= 0.01 * BoostSpeed;
   let yoff = flying;
@@ -97,9 +99,11 @@ function windowResized() {
 function mousePressed() {
   // frameRate(60);
   Boost = true;
-  if (mouseY > width / 2) {
-    BoostSpeed = 3.2;
-  } else BoostSpeed = -3.2;
+  //   if (mouseY > width / 2) {
+  //     BoostSpeed = map(mouseY,0,windowHeight, -3.2,3.2);
+  //   } else BoostSpeed = -3.2;
+  // }
+
 }
 
 function mouseReleased() {
