@@ -106,9 +106,9 @@ function mousePressed() {
   return false;
 }
 
-function mouseReleased() {
-  // frameRate(30);
-  Boost = false;
-  BoostSpeed = 1.0;
-
-}
+// function mouseReleased() {
+//   // frameRate(30);
+//   Boost = false;
+//   BoostSpeed = 1.0;
+//
+// }
