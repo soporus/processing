@@ -12,8 +12,6 @@ const fps = 30;
 
 // const ramptime = 1.0 / fps;
 
-
-
 let flying = 0.0;
 // let pongVar = 1.0;
 // let pongVarbit = false;
@@ -135,16 +133,16 @@ function draw() {
     for (let x = 0; x < cols; x++) {
       // let b = map(terrain[x][y], -100, 333, 16, 0);
       // stroke(0, b * 12, b * 16);
-      vertex(x * scaler, y * scaler, terrain[x][y], uu, vv);
-      uu = !uu;
+      vertex(x * scaler, y * scaler, terrain[x][y], uu, !vv);
+      // uu = !uu;
       // a = baseFreq[x] * map(terrain[x][y], -100, 1000, 20, 1000);
       // oscArray[x].setNote(map(terrain[x][y], -300, 1000, int(baseFreq[x] * 60.0), int(baseFreq[x] *
       //   1200.0)));
       // oscArray[x].frequency.exponentialRampToValueAtTime(a, time + ramptime);
       // b = map(terrain[x][y + 1], -100, 333, 0, 16);
       // fill(b * 2, b * 8, b * 16);
-      vertex(x * scaler, (y + 1) * scaler, terrain[x][y + 1], vv, uu);
-      vv = !vv;
+      vertex(x * scaler, (y + 1) * scaler, terrain[x][y + 1], uu, vv);
+      // vv = !vv;
       //  . t f  f  t
       // u 0 1 0 1
       // v 0 0 1 1
