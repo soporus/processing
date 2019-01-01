@@ -1,6 +1,8 @@
 let img1, img2, img3, img4;
 let u = false;
 let v = false;
+let Boost = false;
+let BoostSpeed = 1.0;
 const scaler = 72;
 const w = 1656;
 const h = 1944;
@@ -38,10 +40,10 @@ function setup() {
 
 function draw() {
   //terrain generation
-  flying -= 0.01;
+  flying -= 0.01 * BoostSpeed;
   let yoff = flying;
   for (let y = 0; y < rows; y++) {
-    let xoff = 0;
+    let xoff = 0.0;
     for (let x = 0; x < cols; x++) {
       terrain[x][y] = map(noise(xoff, yoff), 0, 1, -333, 333);
       xoff += 0.2;
@@ -55,42 +57,19 @@ function draw() {
   ambientLight(192, 0, 128);
 
   for (let y = 0; y < rows - 1; y++) {
-    //  . t f  f  t
-    // u 0 1 0 1
-    // v 0 0 1 1
     texture(img1);
-    // switch (y % 2 === 1) {
-    //   case (u === false && v === false):
-    //     {
-    //       texture(img1);
-    //       u = !u; //true
-    //       break;
-    //     }
-    //   case (u === true && v === false):
-    //     {
-    //       texture(img2);
-    //       u = !u; //false
-    //       v = !v //true
-    //       break;
-    //     }
-    //   case (u === false && v === true):
-    //     {
-    //       texture(img3);
-    //       u = !u; //true
-    //       break;
-    //     }
-    //   case (u === true && v === true):
-    //     {
-    //       texture(img4);
-    //       v = !v; //false
-    //       break;
-    //     }
-    // }
+
     beginShape(TRIANGLE_STRIP);
     for (let x = 0; x < cols; x++) {
       vertex(x * scaler, y * scaler, terrain[x][y], !u, v);
+      // if (Boost === true) {
+      //   u = Math.random() < 0.5;
+      // }
       // u = !u;
       vertex(x * scaler, (y + 1) * scaler, terrain[x][y + 1], u, !v);
+      // if (Boost === true) {
+      //   v = Math.random() < 0.5;
+      // }
       // v = Math.random() < 0.5;
     }
     endShape(CLOSE);
@@ -101,8 +80,10 @@ function draw() {
   noStroke();
   ambientLight(0, 192, 228);
   translate(0, -700, -2500);
-  rotateZ(flying / 10);
-  rotateX(flying / 8);
+
+  rotateZ(flying / 8);
+  rotateX(flying / 4);
+
   texture(img4);
   sphere(width);
   pop();
@@ -131,9 +112,16 @@ function windowResized() {
 }
 
 function mousePressed() {
-  frameRate(0);
+  // frameRate(60);
+  Boost = true;
+  if (mouseY > width / 2) {
+    BoostSpeed = 3.2;
+  } else BoostSpeed = -3.2;
 }
 
 function mouseReleased() {
-  frameRate(30);
+  // frameRate(30);
+  Boost = false;
+  BoostSpeed = 1.0;
+
 }
