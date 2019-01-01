@@ -103,7 +103,7 @@ function mousePressed() {
   //     BoostSpeed = map(mouseY,0,windowHeight, -3.2,3.2);
   //   } else BoostSpeed = -3.2;
   // }
-
+  return false;
 }
 
 function mouseReleased() {
