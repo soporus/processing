@@ -110,7 +110,7 @@ function draw() {
       texture(img6);
       break;
   }
-  sphere(width, 24, 24);
+  sphere(width * 1.5, 24, 24);
   pop();
 }
 
