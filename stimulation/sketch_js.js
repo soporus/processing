@@ -2,14 +2,16 @@ let img1, img2, img3, img4, img5, img6, img7;
 let u = false;
 let v = false;
 let boost = false;
-let boostSpeed;
+let boostSpeedX;
+let boostSpeedY;
 const scaler = 72;
 const w = 1656;
 const h = 1944;
 const cols = w / scaler;
 const rows = h / scaler;
 const fps = 60;
-let flying = 0.0;
+let flyingY = 0.0;
+let flyingX = 0.0;
 let moonRotation = 0.0;
 let terrain = [];
 let swap = 1;
@@ -37,12 +39,14 @@ function setup() {
 }
 
 function draw() {
-  boostSpeed = map(mouseY, 0, windowHeight, -3.2, 3.2);
+  boostSpeedY = map(mouseY, 0, windowHeight, 3.2, -3.2);
+  boostSpeedX = map(mouseX, 0, windowWidth, 3.2, -3.2);
   //terrain generation
-  flying -= 0.01 * boostSpeed;
-  let yoff = flying;
+  flyingY -= 0.01 * boostSpeedY;
+  flyingX -= 0.01 * boostSpeedX;
+  let yoff = flyingY;
   for (let y = 0; y < rows; y++) {
-    let xoff = 0.0;
+    let xoff = flyingX;
     for (let x = 0; x < cols; x++) {
       terrain[x][y] = map(noise(xoff, yoff), 0, 1, -333, 333);
       xoff += 0.2;
@@ -120,6 +124,5 @@ function windowResized() {
 
 function mousePressed() {
   boost = !boost;
-  boostSpeed = map(mouseY, 0, windowHeight, -3.2, 3.2);
   return false;
 }
