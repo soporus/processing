@@ -81,7 +81,7 @@ function draw() {
   push();
   noStroke();
   ambientLight(0, random(64, 160), random(96, 160));
-  translate(0, -1200, -2500);
+  translate(0, -1000, -2500);
 
   rotateZ(moonRotation -= 0.002);
   // rotateX(moonRotation);
