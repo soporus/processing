@@ -1,4 +1,4 @@
-let img1, img2;
+let img1, img2, img3, img4, img5, img6, img7;
 let u = false;
 let v = false;
 let boost = false;
@@ -12,10 +12,16 @@ const fps = 60;
 let flying = 0.0;
 let moonRotation = 0.0;
 let terrain = [];
+let swap = 1;
 
 function preload() {
-  img1 = loadImage("assets/fract-1.png");
-  img2 = loadImage('assets/diff3.png');
+  img7 = loadImage("assets/fract-1.png");
+  img1 = loadImage('assets/diff-seq-1.jpg');
+  img2 = loadImage('assets/diff-seq-2.jpg');
+  img3 = loadImage('assets/diff-seq-3.jpg');
+  img4 = loadImage('assets/diff-seq-4.jpg');
+  img5 = loadImage('assets/diff-seq-5.jpg');
+  img6 = loadImage('assets/diff-seq-6.jpg');
 }
 
 function setup() {
@@ -50,7 +56,7 @@ function draw() {
   ambientLight(255, 0, 160);
 
   for (let y = 0; y < rows - 1; y++) {
-    texture(img1);
+    texture(img7);
     beginShape(TRIANGLE_STRIP);
     for (let x = 0; x < cols; x++) {
       vertex(x * scaler, y * scaler, terrain[x][y], u, !v);
@@ -76,9 +82,34 @@ function draw() {
 
   rotateZ(moonRotation -= 0.002);
   rotateX(moonRotation);
-  rotateX(moonRotation);
+  // rotateX(moonRotation);
   rotateY(moonRotation)
-  texture(img2);
+  switch (true) {
+    case swap === 1:
+      swap = 2;
+      texture(img1);
+      break;
+    case swap === 2:
+      swap = 3;
+      texture(img2);
+      break;
+    case swap === 3:
+      swap = 4;
+      texture(img3);
+      break;
+    case swap === 4:
+      swap = 5;
+      texture(img4);
+      break;
+    case swap === 5:
+      swap = 6;
+      texture(img5);
+      break;
+    case swap === 6:
+      swap = 1;
+      texture(img6);
+      break;
+  }
   sphere(width, 24, 24);
   pop();
 }
