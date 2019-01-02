@@ -53,14 +53,14 @@ function draw() {
     }
     yoff += 0.2;
   }
-  background(0, random(16), map(terrain[0][0], -200, 433, 32, 0));
+  background(random(16), map(terrain[0][0], -200, 433, 24, 0), 0);
   push();
   rotateX(PI / 3);
   translate(-w / 2 + 30, -h / 2, -100);
-  ambientLight(255, 0, 160);
+  ambientLight(255, 128, 255);
 
   for (let y = 0; y < rows - 1; y++) {
-    texture(img7);
+    texture(img1);
     beginShape(TRIANGLE_STRIP);
     for (let x = 0; x < cols; x++) {
       vertex(x * scaler, y * scaler, terrain[x][y], u, !v);
