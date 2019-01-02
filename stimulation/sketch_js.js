@@ -20,9 +20,10 @@ let terrain = [];
 
 function preload() {
   img1 = loadImage("assets/fract-1.png");
-  vid1 = createVideo('assets/diff2.mp4');
-  vid1.loop();
-  vid1.hide();
+  // vid1 = createVideo('assets/diff2.mp4');
+  vid1 = loadImage('assets/diff3.png');
+  // vid1.loop();
+  // vid1.hide();
 }
 
 function setup() {
@@ -79,7 +80,7 @@ function draw() {
   // moon?
   push();
   noStroke();
-  ambientLight(0, 192, 228);
+  ambientLight(255);
   translate(0, -1400, -2500);
 
   rotateZ(moonRotation -= 0.001);
@@ -102,5 +103,6 @@ function mousePressed() {
   //     BoostSpeed = map(mouseY,0,windowHeight, -3.2,3.2);
   //   } else BoostSpeed = -3.2;
   // }
+  BoostSpeed = map(mouseY, 0, windowHeight, -3.2, 3.2);
   return false;
 }
