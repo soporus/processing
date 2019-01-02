@@ -1,36 +1,27 @@
-let img1, vid1;
+let img1, img2;
 let u = false;
 let v = false;
-let Boost = false;
-let BoostSpeed = 1.0;
+let boost = false;
+let boostSpeed;
 const scaler = 72;
 const w = 1656;
 const h = 1944;
 const cols = w / scaler;
 const rows = h / scaler;
-const fps = 30;
-
-// const ramptime = 1.0 / fps;
-
+const fps = 60;
 let flying = 0.0;
 let moonRotation = 0.0;
-// let pongVar = 1.0;
-// let pongVarbit = false;
 let terrain = [];
 
 function preload() {
   img1 = loadImage("assets/fract-1.png");
-  // vid1 = createVideo('assets/diff2.mp4');
-  vid1 = loadImage('assets/diff3.png');
-  // vid1.loop();
-  // vid1.hide();
+  img2 = loadImage('assets/diff3.png');
 }
 
 function setup() {
   createCanvas(windowWidth, windowHeight, WEBGL);
   textureMode(NORMAL);
   terrain = [];
-
   for (let j = 0; j < cols; j++) {
     terrain[j] = [];
   }
@@ -40,9 +31,9 @@ function setup() {
 }
 
 function draw() {
-  BoostSpeed = map(mouseY, 0, windowHeight, -3.2, 3.2);
+  boostSpeed = map(mouseY, 0, windowHeight, -3.2, 3.2);
   //terrain generation
-  flying -= 0.01 * BoostSpeed;
+  flying -= 0.01 * boostSpeed;
   let yoff = flying;
   for (let y = 0; y < rows; y++) {
     let xoff = 0.0;
@@ -62,14 +53,14 @@ function draw() {
     texture(img1);
     beginShape(TRIANGLE_STRIP);
     for (let x = 0; x < cols; x++) {
-      vertex(x * scaler, y * scaler, terrain[x][y], !u, v);
+      vertex(x * scaler, y * scaler, terrain[x][y], u, !v);
       //glitch texture on click
-      // if (Boost === true) {
-      //   u = Math.random() < 0.5;
-      // }
+      if (boost === true) {
+        u = Math.random() < 0.5;
+      }
       // u = !u;
-      vertex(x * scaler, (y + 1) * scaler, terrain[x][y + 1], u, !v);
-      // if (Boost === true) {
+      vertex(x * scaler, (y + 1) * scaler, terrain[x][y + 1], !u, v);
+      // if (boost === true) {
       //   v = Math.random() < 0.5;
       // }
       // v = Math.random() < 0.5;
@@ -84,10 +75,10 @@ function draw() {
   translate(0, -1000, -2500);
 
   rotateZ(moonRotation -= 0.002);
-  // rotateX(moonRotation);
-  // rotateX(moonRotation);
+  rotateX(moonRotation);
+  rotateX(moonRotation);
   rotateY(moonRotation)
-  texture(vid1);
+  texture(img2);
   sphere(width, 24, 24);
   pop();
 }
@@ -97,12 +88,7 @@ function windowResized() {
 }
 
 function mousePressed() {
-  // frameRate(60);
-  Boost = true;
-  //   if (mouseY > width / 2) {
-  //     BoostSpeed = map(mouseY,0,windowHeight, -3.2,3.2);
-  //   } else BoostSpeed = -3.2;
-  // }
-  BoostSpeed = map(mouseY, 0, windowHeight, -3.2, 3.2);
+  boost = !boost;
+  boostSpeed = map(mouseY, 0, windowHeight, -3.2, 3.2);
   return false;
 }
