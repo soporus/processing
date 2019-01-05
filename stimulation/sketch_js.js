@@ -1,6 +1,11 @@
+// paraSight: parasite / line of sight
+//ideas
+// time economy.  time limit, sphere is full of time.  cube drains time
+// time can be drained by cube gaining line of sight with sphere
+// use back plane of cube for display for player
 let img1, img2, img3, img4, img5, img6, img7;
-let u = false;
-let v = false;
+let u = -1.0;
+let v = -1.0;
 let boost = false;
 let boostSpeedX;
 let boostSpeedY;
@@ -15,6 +20,8 @@ let flyingX = 0.0;
 let moonRotation = 0.0;
 let terrain = [];
 let swap = 1;
+let ship;
+let angle = 0;
 
 function preload() {
   img7 = loadImage("assets/fract-1.png");
@@ -27,6 +34,7 @@ function preload() {
 }
 
 function setup() {
+  ship = new shipObject(33, 50, 25);
   createCanvas(windowWidth, windowHeight, WEBGL);
   textureMode(NORMAL);
   terrain = [];
@@ -39,6 +47,9 @@ function setup() {
 }
 
 function draw() {
+  u = sin(angle);
+  v = sin(angle);
+  directionalLight(255, 255, 255, 0, 1, 1, -1);
   boostSpeedY = map(mouseY, 0, windowHeight, 3.2, -3.2);
   boostSpeedX = map(mouseX, 0, windowWidth, 3.2, -3.2);
   //terrain generation
@@ -55,39 +66,42 @@ function draw() {
   }
   background(random(16), map(terrain[0][0], -200, 433, 24, 0), 0);
   push();
+
   rotateX(PI / 3);
-  translate(-w / 2 + 30, -h / 2, -100);
+  translate(-w / 2, -h / 2, -100);
+  pointLight(32, 96, 255, 0, 0, h, 1000);
   ambientLight(255, 128, 255);
 
   for (let y = 0; y < rows - 1; y++) {
     texture(img1);
+    // specularMaterial(128, 228, 255);
+    // ambientMaterial(128, 228, 255);
     beginShape(TRIANGLE_STRIP);
     for (let x = 0; x < cols; x++) {
-      vertex(x * scaler, y * scaler, terrain[x][y], u, !v);
+      vertex(x * scaler, y * scaler, terrain[x][y], u, -1 * v);
       //glitch texture on click
       if (boost === true) {
         u = Math.random() < 0.5;
       }
-      // u = !u;
-      vertex(x * scaler, (y + 1) * scaler, terrain[x][y + 1], !u, v);
-      // if (boost === true) {
-      //   v = Math.random() < 0.5;
-      // }
-      // v = Math.random() < 0.5;
+      vertex(x * scaler, (y + 1) * scaler, terrain[x][y + 1], -1 * u, v);
     }
     endShape(CLOSE);
   }
+  angle += 0.01;
+
+  // ship.display();
   pop();
   // moon?
   push();
   noStroke();
-  ambientLight(0, random(64, 160), random(96, 160));
+  // ambientLight(0, random(64, 160), random(96, 160));
   translate(0, -1000, -2500);
 
-  rotateZ(moonRotation -= 0.002);
-  rotateX(moonRotation);
+  // rotateZ(moonRotation -= 0.002);
+  rotateY(45);
+  rotateX(moonRotation -= 0.002);
   // rotateX(moonRotation);
-  rotateY(moonRotation)
+
   switch (true) {
     case swap === 1:
       swap = 2;
@@ -114,7 +128,7 @@ function draw() {
       texture(img6);
       break;
   }
-  sphere(width * 1.5, 24, 24);
+  sphere(1000, 20, 20);
   pop();
 }
 
