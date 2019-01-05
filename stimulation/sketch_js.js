@@ -34,7 +34,7 @@ function preload() {
 }
 
 function setup() {
-  ship = new shipObject(33, 50, 25);
+  // ship = new shipObject(33, 50, 25);
   createCanvas(windowWidth, windowHeight, WEBGL);
   textureMode(NORMAL);
   terrain = [];
