@@ -69,8 +69,9 @@ function draw() {
 
   rotateX(PI / 3);
   translate(-w / 2, -h / 2, -100);
-  pointLight(32, 96, 255, 0, 0, h, 1000);
-  ambientLight(255, 128, 255);
+  // pointLight(32, 96, 255, 0, 0, h, 1000);
+  ambientLight(228, 128, 228);
+  ambientMaterial(255, 255, 255);
 
   for (let y = 0; y < rows - 1; y++) {
     texture(img1);
@@ -94,7 +95,6 @@ function draw() {
   // moon?
   push();
   noStroke();
-  // ambientLight(0, random(64, 160), random(96, 160));
   translate(0, -1000, -2500);
 
   // rotateZ(moonRotation -= 0.002);
@@ -128,6 +128,7 @@ function draw() {
       texture(img6);
       break;
   }
+
   sphere(1000, 20, 20);
   pop();
 }
