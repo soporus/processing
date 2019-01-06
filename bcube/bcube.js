@@ -1,7 +1,7 @@
 let angle = 0;
 const barWidth = 80.0;
-const barPadding = 8;
-let maxD;
+// const barPadding = 8;
+// let maxD;
 const w = barWidth / 2;
 let toggleSpin = false;
 let alt = false;
@@ -22,9 +22,9 @@ function setup() {
 
 function draw() {
   // rotateX(PI / 3);
-  rotateX(map(mouseY, -height / 2, height / 2, 2, -2));
+  rotateX(radians(map(mouseY, -height / 2, height / 2, 360, 0)));
   // rotateZ(angle / 10);
-  rotateZ(map(mouseX, -width / 2, width / 2, -2, 2));
+  rotateY(radians(map(mouseX, -width / 2, width / 2, 0, 360)));
   background(0);
   let offset = 0;
   for (let z = 0; z < height; z += w + barWidth) {
