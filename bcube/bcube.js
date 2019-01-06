@@ -4,9 +4,9 @@ const barWidth = 80.0;
 // let maxD;
 const w = barWidth / 2;
 let toggleSpin = false;
-let alt = false;
 let spinType = 0;
 let w2;
+let startRot = true;
 
 function setup() {
   createCanvas(windowWidth, windowHeight, WEBGL);
@@ -22,9 +22,12 @@ function setup() {
 
 function draw() {
   // rotateX(PI / 3);
-  rotateX(radians(map(mouseY, -height / 2, height / 2, 360, 0)));
-  // rotateZ(angle / 10);
-  rotateY(radians(map(mouseX, -width / 2, width / 2, 0, 360)));
+  // rotateX(radians(map(mouseY, -height / 2, height / 2, 360, 0)));
+  // rotateX(map(mouseY, -height / 2, height / 2, Math.PI, -Math.PI));
+  rotateX(rotationX);
+  rotateZ((angle / 10) * startRot);
+  // rotateY(radians(map(mouseX, -width / 2, width / 2, 0, 360)));
+  rotateY(map(mouseX, -width / 2, width / 2, Math.PI, -Math.PI));
   background(0);
   let offset = 0;
   for (let z = 0; z < height; z += w + barWidth) {
@@ -40,23 +43,23 @@ function draw() {
       stroke(c, map(c, 0, 255, 192, 0), c / 1.5 + (z / 2));
 
       if (toggleSpin === true) {
-        switch (true) {
-          case spinType === 0:
+        switch (spinType) {
+          case 0:
             push();
-            rotateX(radians(map(c, 0, 255, 0, 360)));
-            box((x - (width / 2)), h - offset * 20, x - (width / 2));
+            rotateY(map(c, 0, 255, -Math.PI, Math.PI));
+            box(x - (width / 2), h - offset * 20, x - (width / 2));
             pop();
             break;
-          case spinType === 1:
+          case 1:
             push();
-            rotateY(map(c, 0, 255, 0, PI));
-            box((x - (width / 2)), h - offset * 20, x - (width / 2));
+            rotateZ(map(c, 0, 255, Math.PI, -Math.PI));
+            box((h - (width / 2)), x - offset * 20, x - (width / 2));
             pop();
             break;
-          case spinType === 2:
+          case 2:
             push();
-            rotateZ(map(c, 0, 255, -PI, PI));
-            box((x - (width / 2)), h - offset * 20, x - (width / 2));
+            rotateY(map(c, 0, 255, -Math.PI, Math.PI));
+            box((h - (width / 2)), x * (offset / Math.log(x)), x - (width / 2));
             pop();
             break;
           default:
@@ -64,13 +67,19 @@ function draw() {
         }
       }
       if (toggleSpin === false) {
-        // push();
-        if (alt === true) {
-          box((x - (width / Math.log(x))), h + (offset / Math.log(x)), x - (width / Math.log(x)));
-        } else {
-          box((x - (width / 2)), h - offset * 20, x - (width / 2));
+        switch (true) {
+          case spinType === 0:
+            box((x - (width / 2)), h - offset * 20, x - (width / 2));
+            break;
+          case spinType === 1:
+            box((h - (width / 2)), x - offset * 20, x - (width / 2));
+            break;
+          case spinType === 2:
+            box((h - (width / 2)), x * (offset / Math.log(x)), x - (width / 2));
+            break;
+          default:
+            break;
         }
-        // pop();
       }
       offset += a;
     }
@@ -83,18 +92,17 @@ function windowResized() {
 }
 
 function mousePressed() {
+  startRot = !startRot;
   toggleSpin = !toggleSpin;
-  switch (true) {
-    case spinType === 0:
+  switch (spinType) {
+    case 0:
       spinType = 1;
       break;
-    case spinType === 1:
+    case 1:
       spinType = 2;
-      alt = !alt;
       break;
-    case spinType === 2:
+    case 2:
       spinType = 0;
-      alt = !alt;
       break;
     default:
       break;
