@@ -24,7 +24,7 @@ function draw() {
   // rotateX(PI / 3);
   // rotateX(radians(map(mouseY, -height / 2, height / 2, 360, 0)));
   // rotateX(map(mouseY, -height / 2, height / 2, Math.PI, -Math.PI));
-  rotateX(rotationX);
+  rotateX(radians(rotationX));
   rotateZ((angle / 10) * startRot);
   // rotateY(radians(map(mouseX, -width / 2, width / 2, 0, 360)));
   rotateY(map(mouseX, -width / 2, width / 2, Math.PI, -Math.PI));
