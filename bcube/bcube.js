@@ -4,13 +4,14 @@ const barPadding = 8;
 let ma;
 let maxD;
 const w = barWidth / 2;
+let toggleSpin = false;
 
 function setup() {
   createCanvas(windowWidth, windowHeight, WEBGL);
   ma = atan(cos(QUARTER_PI));
   maxD = dist(0, 0, 300, 300);
   noFill();
-  strokeWeight(4)
+  strokeWeight(4);
   stroke(255, 0, 255);
   // normalMaterial();
 }
@@ -33,8 +34,12 @@ function draw() {
       let h = map(sin(a), -1, 1, -windowHeight / 2, windowHeight / 2);
       let c = map(h, -windowHeight / 2, windowHeight / 2, 0, 255);
       stroke(c, map(c, 0, 255, 192, 0), c / 1.5 + (z / 2));
+      push();
+      if (toggleSpin === true) {
+        rotateY(PI / map(c, 0, 255, -45, 45));
+      }
       box((x - (width / 2)) + (w / 2), h - offset * 20, x - (width / 2) + (w / 2) - w);
-      // cylinder((x - (width / 2)) + (w / 2), (h - offset * 20) - w)
+      pop();
       offset += a;
     }
   }
@@ -43,4 +48,9 @@ function draw() {
 
 function windowResized() {
   resizeCanvas(windowWidth, windowHeight);
+}
+
+function mousePressed() {
+  toggleSpin = !toggleSpin;
+  return false;
 }
