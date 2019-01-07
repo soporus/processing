@@ -48,7 +48,7 @@ function setup() {
 
 function draw() {
 
-  u = v = sin(angle);
+  u = v = Math.sin(angle);
   directionalLight(255, 255, 255, 0, 1, 1, -1);
   boostSpeedY = map(mouseY, 0, windowHeight, 3.2, -3.2);
   boostSpeedX = map(mouseX, 0, windowWidth, 3.2, -3.2);
