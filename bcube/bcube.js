@@ -6,7 +6,6 @@ const w = barWidth / 2;
 let toggleSpin = false;
 let spinType = 0;
 let w2;
-let startRot = true;
 
 function setup() {
   createCanvas(windowWidth, windowHeight, WEBGL);
@@ -21,15 +20,14 @@ function setup() {
 }
 
 function draw() {
-  // rotateX(PI / 3);
-  // rotateX(radians(map(mouseY, -height / 2, height / 2, 360, 0)));
-  // rotateX(map(mouseY, -height / 2, height / 2, Math.PI, -Math.PI));
+  //rotation for desktop
+  rotateX(map(mouseY, -height / 2, height / 2, Math.PI, -Math.PI));
+  rotateY(map(mouseX, -width / 2, width / 2, Math.PI, -Math.PI));
+  //rotation for mobile
   rotateX(radians(rotationX));
   rotateY(radians(rotationY));
   rotateZ(radians(rotationZ));
-  // rotateZ((angle / 10) * startRot);
-  // rotateY(radians(map(mouseX, -width / 2, width / 2, 0, 360)));
-  rotateY(map(mouseX, -width / 2, width / 2, Math.PI, -Math.PI));
+
   background(0);
   let offset = 0;
   for (let z = 0; z < height; z += w + barWidth) {
@@ -46,21 +44,22 @@ function draw() {
 
       if (toggleSpin === true) {
         switch (spinType) {
-          case 0:
+          case 1: // normal
             push();
             rotateY(map(c, 0, 255, -Math.PI, Math.PI));
             box(x - (width / 2), h - offset * 20, x - (width / 2));
             pop();
             break;
-          case 1:
+          case 2: //scattered lines
             push();
-            rotateZ(map(c, 0, 255, Math.PI, -Math.PI));
-            box((h - (width / 2)), x - offset * 20, x - (width / 2));
+            let sinx = map(Math.cos(x), -1, 1, -windowHeight / 2, windowHeight / 2);
+            rotateX((angle / x) * 10);
+            box((sinx - (width / 2)), sinx - offset * 20, sinx * x - (width / 2));
             pop();
             break;
-          case 2:
+          case 0:
             push();
-            rotateY(map(c, 0, 255, -Math.PI, Math.PI));
+            rotateZ((angle * x) / 1000);
             box((h - (width / 2)), x * (offset / Math.log(x)), x - (width / 2));
             pop();
             break;
@@ -69,14 +68,14 @@ function draw() {
         }
       }
       if (toggleSpin === false) {
-        switch (true) {
-          case spinType === 0:
+        switch (spinType) {
+          case 0: // normal
             box((x - (width / 2)), h - offset * 20, x - (width / 2));
             break;
-          case spinType === 1:
+          case 1:
             box((h - (width / 2)), x - offset * 20, x - (width / 2));
             break;
-          case spinType === 2:
+          case 2:
             box((h - (width / 2)), x * (offset / Math.log(x)), x - (width / 2));
             break;
           default:
@@ -94,8 +93,8 @@ function windowResized() {
 }
 
 function mousePressed() {
-  startRot = !startRot;
   toggleSpin = !toggleSpin;
+  //switch animation on click or touch event
   switch (spinType) {
     case 0:
       spinType = 1;
