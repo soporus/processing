@@ -42,7 +42,7 @@ function draw() {
       let c = map(h, -windowHeight / 2, windowHeight / 2, 0, 255);
       stroke(c, map(c, 0, 255, 192, 0), c / 1.5 + (z / 2));
 
-      if (toggleSpin === true) {
+      if (toggleSpin) {
         switch (spinType) {
           case 1: // normal
             push();
@@ -67,7 +67,7 @@ function draw() {
             break;
         }
       }
-      if (toggleSpin === false) {
+      if (!toggleSpin) {
         switch (spinType) {
           case 0: // normal
             box((x - (width / 2)), h - offset * 20, x - (width / 2));
