@@ -4,8 +4,8 @@
 // time can be drained by cube gaining line of sight with sphere
 // use back plane of cube for display for player
 let img1, img2, img3, img4, img5, img6, img7;
-let u = -1.0;
-let v = -1.0;
+let u = 0.0;
+let v = 0.0;
 let boost = false;
 let boostSpeedX;
 let boostSpeedY;
@@ -47,8 +47,8 @@ function setup() {
 }
 
 function draw() {
-  u = sin(angle);
-  v = sin(angle);
+
+  u = v = sin(angle);
   directionalLight(255, 255, 255, 0, 1, 1, -1);
   boostSpeedY = map(mouseY, 0, windowHeight, 3.2, -3.2);
   boostSpeedX = map(mouseX, 0, windowWidth, 3.2, -3.2);
@@ -64,8 +64,12 @@ function draw() {
     }
     yoff += 0.2;
   }
-  background(random(16), map(terrain[0][0], -200, 433, 24, 0), 0);
+  // background(random(16), map(terrain[0][0], -200, 433, 24, 0), 0);
+  background(Math.floor(Math.random() * Math.floor(16)), map(terrain[0][0], -200, 433, 24, 0), 0);
+
+
   push();
+
 
   rotateX(PI / 3);
   translate(-w / 2, -h / 2, -100);
@@ -88,8 +92,7 @@ function draw() {
     }
     endShape(CLOSE);
   }
-  angle += 0.01;
-
+  angle += 0.005;
   // ship.display();
   pop();
   // moon?
@@ -130,6 +133,7 @@ function draw() {
   }
 
   sphere(1000, 20, 20);
+
   pop();
 }
 
