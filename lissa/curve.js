@@ -2,21 +2,29 @@ class Curve {
   constructor() {
     this.path = [];
     this.current = createVector();
-    this.curveColor = color(128,128,128);
+    this.curveColor = color(128, 128, 128);
   }
 
-   setX( x) {this.current.x = x;}
-   setY( y) {this.current.y = y;}
-   addPoint() {this.path.push(this.current);}
+  setX(x) {
+    this.current.x = x;
+  }
+  setY(y) {
+    this.current.y = y;
+  }
+  addPoint() {
+    this.path.push(this.current);
+  }
 
-   reset() {this.path = [];}
+  reset() {
+    this.path = [];
+  }
 
-//    setColor(color1, color2) {
-//      this.curveColor = lerpColor(this.color1,this.color2,0.66);
-//    }
+  //    setColor(color1, color2) {
+  //      this.curveColor = lerpColor(this.color1,this.color2,0.66);
+  //    }
 
-   show() {
-    strokeWeight(3);
+  show() {
+    strokeWeight(2);
     stroke(this.curveColor);
     noFill();
     beginShape();
@@ -25,7 +33,7 @@ class Curve {
     }
     endShape();
 
-    strokeWeight(8);
+    strokeWeight(6);
     point(this.current.x, this.current.y);
     this.current = createVector();
   }

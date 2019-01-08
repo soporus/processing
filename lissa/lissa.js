@@ -23,7 +23,7 @@ function makeColorArray(rows, cols) {
 }
 
 let angle = 0;
-const w = 120;
+const w = 60;
 let cols;
 let rows;
 let curves;
@@ -41,8 +41,8 @@ function setup() {
   for (let j = 0; j < rows; j++) {
     for (let i = 0; i < cols; i++) {
       curves[j][i] = new Curve();
-//       curves[j][i].setColor(colors[i][0],colors[0][j]);
-      curves[j][i].curveColor = lerpColor(colors[j][0],colors[0][i],0.5);
+      //       curves[j][i].setColor(colors[i][0],colors[0][j]);
+      curves[j][i].curveColor = lerpColor(colors[j][0], colors[0][i], 0.5);
     }
   }
 }
@@ -60,7 +60,7 @@ function draw() {
     ellipse(cx, cy, d, d);
     let x = r * Math.cos(angle * (i + 1) - HALF_PI);
     let y = r * Math.sin(angle * (i + 1) - HALF_PI);
-    strokeWeight(8);
+    strokeWeight(6);
     point(cx + x, cy + y);
     strokeWeight(1);
     line(cx + x, 0, cx + x, height);
@@ -80,7 +80,7 @@ function draw() {
     ellipse(cx, cy, d, d);
     let x = r * Math.cos(angle * (j + 1) - HALF_PI);
     let y = r * Math.sin(angle * (j + 1) - HALF_PI);
-    strokeWeight(8);
+    strokeWeight(6);
     point(cx + x, cy + y);
     strokeWeight(1);
     line(0, cy + y, width, cy + y);
@@ -114,8 +114,8 @@ function windowResized() {
 }
 
 function randColor(min, max) {
-  let randomcolor = 
-    color(Math.floor(Math.random() * (max - min)) + min,
+  let randomcolor = color(
+    Math.floor(Math.random() * (max - min)) + min,
     Math.floor(Math.random() * (max - min)) + min,
     Math.floor(Math.random() * (max - min)) + min);
   return randomcolor;
