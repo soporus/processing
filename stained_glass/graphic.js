@@ -7,10 +7,11 @@ function setup() {
   rectMode(CENTER);
   stroke(0);
   strokeWeight(3);
+  background(0);
 }
 
 function draw() {
-  // background(0);
+
   loc = map(Math.sin(angle), -1, 1, 0, width / 8);
   squareParty(width / 2, height / 2, width);
   angle += 0.01;
