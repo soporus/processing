@@ -1,6 +1,6 @@
 // remove numbers?  to allow for larger palette
 let font;
-const fontsize = 40;
+const fontsize = 30;
 const gapX = -fontsize * 0.35;
 const gridX = fontsize + gapX;
 const gapY = fontsize * 0.2;
