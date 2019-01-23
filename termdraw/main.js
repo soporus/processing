@@ -33,12 +33,18 @@ const gridX = fontsize + gapX;
 const gapY = fontsize * 0.2;
 const gridY = fontsize + gapY;
 let mouse = new p5.Vector(0, 0);
-let slot = 9;
+let slot = 5;
 let row = 0;
 let brush = '\u2588';
 let grid = [];
+let pOffset = 0;
+let rowA = 0;
+let rowB = 1;
+
+const arrows = ['\u25b2', '\u25bc']
 
 const blocks = [
+  [
   '\u2580', // top block
   '\u2594', // high thin
   '\u2581', // low thin
@@ -56,10 +62,8 @@ const blocks = [
   '\u2593', // shade hi
   '\u2592', // shade med
   '\u2591', // shade low
-  '\u2263' // 4 stripes
-
-]
-const blocks2 = [
+  '\u00A0' // space
+], [
   '\u2599', // L
   '\u259A', // tetris top left, bottom left
   '\u259B', // vert L
@@ -78,7 +82,45 @@ const blocks2 = [
   '\u2534', // top cross
   '\u252c', // bottom cross
   '\u00A0' // space
-]
+], [
+  '\u25a0', // box arrow
+  '\u25a1', // box arrow
+  '\u25a3', // box arrow
+  '\u25a4', // box arrow
+  '\u25a5', // box arrow
+  '\u25a6', // box arrow
+  '\u25a7', // box arrow
+  '\u25a8', // box arrow
+  '\u25a9', // box arrow
+  '\u25f0', // box arrow
+  '\u25f1', // box arrow
+  '\u25f2', // box arrow
+  '\u25f3', // box arrow
+  '\u25c0', // box arrow
+  '\u25b2', // box arrow
+  '\u25bc', // box arrow
+  '\u25b6', // box arrow
+  '\u00A0' // space
+], [
+  '\u2b12', // triangle
+  '\u2b13', // triangle
+  '\u25e7', // triangle
+  '\u25e8', // triangle
+  '\u2b14', // triangle
+  '\u2b15', // triangle
+  '\u25ea', // triangle
+  '\u25e9', // triangle
+  '\u25e2', // triangle
+  '\u25e3', // triangle
+  '\u25e5', // triangle
+  '\u25e4', // triangle
+  '\u271b', // triangle
+  '\u2725', // triangle
+  '\u2731', // triangle
+  '\u2733', // triangle
+  '\u273a', // triangle
+  '\u00A0' // space
+]];
 
 function preload() {
   font = loadFont("assets/DejaVuSansMono.ttf");
@@ -101,7 +143,7 @@ function setup() {
   textFont(font);
   textSize(fontsize);
   textAlign(LEFT, TOP);
-  fill(0, 192, 255);
+  // fill(128, 192, 255);
   rectMode(CORNERS);
 }
 
@@ -121,28 +163,32 @@ function draw() {
   stroke(64);
   // rect x, y, width, height
   rect(0, height - gridY * 2 - 4, 18 * gridX + 2, height); //clean this up
+  fill(0);
+  rect(19 * gridX - 3, height - gridY * 2 - 4, (19 * gridX) + gridX + 1, height);
   noStroke();
+  // noFill();
   //draw the palette
-  for (let i = 0; i < blocks.length; i++) {
-    strokeWeight(1);
+  for (let i = 0; i < 18; i++) {
     if (row === 0) {
       i !== slot ? fill(128) : fill(228);
-    } else {
-      fill(96);
-    } // highlight slot
-    text(blocks[i], i * gridX + 2, height - (gridY * 2) - 2); // row 1
+    } else fill(128);
+    // highlight slot
+    text(blocks[rowA][i], i * gridX + 2, height - (gridY * 2) - 2); // row 1
+    row === 2 ? fill(228) : fill(128);
+    i === 17 ? text(arrows[0], (2 + i) * gridX, height - (gridY * 2) - 2) : false; //palette up
     if (row === 1) {
       i !== slot ? fill(128) : fill(228);
-    } else {
-      fill(96);
-    }
-    text(blocks2[i], i * gridX + 2, height - gridY - 2); //  row 2
+    } else fill(128);
+    text(blocks[rowB][i], i * gridX + 2, height - gridY - 2); //  row 2
+    row === 3 ? fill(228) : fill(128);
+    i === 17 ? text(arrows[1], (2 + i) * gridX, height - gridY - 2) : false; // palette down
+    // set the text color again
+    fill(128, 192, 255);
   }
-  // set the text color again
-  fill(0, 192, 255);
 }
 
 function mousePressed() {
+  paletteShift();
   paletteBox();
   redraw();
   grid[int(mouse.x / gridX)][int(mouse.y / gridY)] = brush;
@@ -151,6 +197,7 @@ function mousePressed() {
 }
 
 function mouseDragged() {
+  // paletteShift();
   paletteBox();
   redraw();
   grid[int(mouse.x / gridX)][int(mouse.y / gridY)] = brush;
@@ -158,24 +205,43 @@ function mouseDragged() {
   return false;
 }
 
+function paletteShift() {
+  if ((mouseX > 19 * gridX) &&
+    (mouseX < 20 * gridX) &&
+    (mouseY < height - gridY) &&
+    (mouseY > height - gridY * 2 - 4)) {
+    row = 2;
+    rowA > 0 ? rowA -= 1 : rowA = 3;
+    rowB > 0 ? rowB -= 1 : rowB = 3;
+    console.log("pallete switched up\t", rowA, '\t', rowB);
+  }
+  if ((mouseX > 19 * gridX) &&
+    (mouseX < 20 * gridX) &&
+    (mouseY < height) &&
+    (mouseY > height - gridY)) {
+    row = 3;
+    rowA < 3 ? rowA += 1 : rowA = 0;
+    rowB < 3 ? rowB += 1 : rowB = 0;
+    console.log("pallete switched down\t", rowA, '\t', rowB);
+  }
+}
+
 function paletteBox() {
   if ((mouseX < 18 * gridX + 2) &&
     (mouseY < height - gridY) &&
     (mouseY > height - gridY * 2 - 4)) {
-    // console.log("blocks selected");
     row = 0;
     paletteSelect(row);
-    console.log(blocks[slot]);
-    brush = blocks[slot];
+    console.log(blocks[rowA][slot]);
+    brush = blocks[rowA][slot];
   }
   if ((mouseX < 18 * gridX + 2) &&
     (mouseY < height) &&
     (mouseY > height - gridY)) {
-    // console.log("blocks2 selected");
     row = 1;
     paletteSelect(row);
-    console.log(blocks2[slot]);
-    brush = blocks2[slot];
+    console.log(blocks[rowB][slot]);
+    brush = blocks[rowB][slot];
   }
 }
 
