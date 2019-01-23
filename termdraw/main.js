@@ -20,10 +20,8 @@
 // ▙░▄░▄░▄░▟▀▙▁▏▕▁▟▕▏▙▁▏▕▁▟▀▙░▄░▄░▄░▟▏
 // ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔
 // to do:
-// rearrange palette, small blocks confused with double small block
-// only 4 height blocks needed, only 3 of the width blocks needed
+// palettes 2 -3 pin down the useful drawing chars for these
 // add color array of same size of grid, consider 3rd array dimension
-// add additional palettes
 // add ability to save, dump grid to txt
 
 let font;
