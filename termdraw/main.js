@@ -1,4 +1,31 @@
-// remove numbers?  to allow for larger palette
+// termdraw unicode ansi art editor in javascript
+//shawn wilson 2019
+// ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+// ▛░▀░▀░▀░▜▄▛▔▏▕▔▜▕▏▛▔▏▕▔▜▄▛░▀░▀░▀░▜▏
+// ▛░▀░▀░▀░▜▄▛▔▏▕▔▜▕▏▛▔▏▕▔▜▄▛░▀░▀░▀░▜▏
+// ▏▁░▁░▁░▁▟▒░▔▁▁▔▟░░▙▔▁▁▔░▒▙▁░▁░▁░▁▕▏
+// ▏░░░░▁◼▁◼▓▒▛░▔▟▔▏▕▔▙▔░▜▒▓◼▁◼▁░░░░▕▏
+// ▏░░░▕▕▕▕▕▄▟▘▗▟▛▜▄▄▛▜▙▖▝▙▄▏▏▏▏▏░░░▕▏
+// ▌▖▖▖▟▗▗▗▗░▛▏▟▄▖▖▖▗▗▗▄▙▕▜░▖▖▖▖▙▗▗▗▐▏
+// ▏▏▏▏▏▟▁▁▁▁▙▛▀▀▛░▚▞░▜▀▀▜▟▁▁▁▁▙▕▕▕▕▕▏
+// ▁▛▏▛▏░▛▀░▜▛▀░▀▌▚██▞▐▀░▀▜▛░▀▜░▕▜▕▜▁▏
+// ▐▒▏▒▏▒▌◼░◼░◼░◼▌▐◼◼▌▐◼░◼░◼░◼▐▒▕▒▕▒▌
+// ▔▙▏▙▏░▙▄░▟▙▄░◼▌▞██▚▐◼░▄▟▙░▄▟░▕▟▕▟▔▏
+// ▏▏▏▏▏▜▔▔▔▔▛▙▄▄▙░▞▚░▟▄▄▟▜▔▔▔▔▛▕▕▕▕▕▏
+// ▌▘▘▘▜▝▝▝▝░▙▏▜▀▘▘▘▝▝▝▀▛▕▟░▘▘▘▘▛▝▝▝▐▏
+// ▏░░░▕▕▕▕▕▀▜▖▝▜▙▟▀▀▙▟▛▘▗▛▀▏▏▏▏▏░░░▕▏
+// ▏░░░░▔◼▔◼▓▒▙░▁▜▁▏▕▁▛▁░▟▒▓◼▔◼▔░░░░▕▏
+// ▏▔░▔░▔░▔▜▒░▁▔▔▁▜░░▛▁▔▔▁░▒▛▔░▔░▔░▔▕▏
+// ▙░▄░▄░▄░▟▀▙▁▏▕▁▟▕▏▙▁▏▕▁▟▀▙░▄░▄░▄░▟▏
+// ▙░▄░▄░▄░▟▀▙▁▏▕▁▟▕▏▙▁▏▕▁▟▀▙░▄░▄░▄░▟▏
+// ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔
+// to do:
+// rearrange palette, small blocks confused with double small block
+// only 4 height blocks needed, only 3 of the width blocks needed
+// add color array of same size of grid, consider 3rd array dimension
+// add additional palettes
+// add ability to save, dump grid to txt
+
 let font;
 const fontsize = 30;
 const gapX = -fontsize * 0.35;
@@ -6,48 +33,51 @@ const gridX = fontsize + gapX;
 const gapY = fontsize * 0.2;
 const gridY = fontsize + gapY;
 let mouse = new p5.Vector(0, 0);
-let slot = 8;
+let slot = 9;
 let row = 0;
 let brush = '\u2588';
 let grid = [];
 
 const blocks = [
-  '\u25FC',
-  '\u2580',
-  '\u2581',
-  '\u2582',
-  '\u2583',
-  '\u2584',
-  '\u2585',
-  '\u2586',
-  '\u2587',
-  '\u2588',
-  '\u2589',
-  '\u258A',
-  '\u258B',
-  '\u258C',
-  '\u258D',
-  '\u258E',
-  '\u258F',
+  '\u2580', // top block
+  '\u2594', // high thin
+  '\u2581', // low thin
+  '\u2584', // bottom block
+  '\u2588', //full
+  '\u25FC', // middle block
+  '\u258C', //tall half left
+  '\u258F', //tall thin left
+  '\u2598', //small upper left
+  '\u2596', //small low left
+  '\u2597', //small low right
+  '\u259d', //small upper right
+  '\u2595', //tall thin right
+  '\u2590', //tall half right
+  '\u2593', // shade hi
+  '\u2592', // shade med
+  '\u2591', // shade low
+  '\u2263' // 4 stripes
+
 ]
 const blocks2 = [
-  '\u2590',
-  '\u2591',
-  '\u2592',
-  '\u2593',
-  '\u2594',
-  '\u2595',
-  '\u2596',
-  '\u2597',
-  '\u2598',
-  '\u2599',
-  '\u259A',
-  '\u259B',
-  '\u259C',
-  '\u259D',
-  '\u259E',
-  '\u259F',
-  '\u00A0',
+  '\u2599', // L
+  '\u259A', // tetris top left, bottom left
+  '\u259B', // vert L
+  '\u259C', // 7
+  '\u259E', // tetris top right, bottom right
+  '\u259F', // J
+  '\u2510', // bottom left
+  '\u2518', // top left
+  '\u2524', // cross left
+  '\u253c', // cross full
+  '\u251C', // cross right
+  '\u2514', // top right
+  '\u250C', // bottom right
+  '\u2500', // horizontal
+  '\u2502', // vertical
+  '\u2534', // top cross
+  '\u252c', // bottom cross
+  '\u00A0' // space
 ]
 
 function preload() {
@@ -90,22 +120,23 @@ function draw() {
   strokeWeight(2);
   stroke(64);
   // rect x, y, width, height
-  rect(0, height - gridY * 2 - 4, 17 * gridX + 2, height); //clean this up
+  rect(0, height - gridY * 2 - 4, 18 * gridX + 2, height); //clean this up
   noStroke();
   //draw the palette
   for (let i = 0; i < blocks.length; i++) {
+    strokeWeight(1);
     if (row === 0) {
       i !== slot ? fill(128) : fill(228);
     } else {
-      fill(64);
+      fill(96);
     } // highlight slot
-    text(blocks[i], i * gridX, height - (gridY * 2)); // row 1
+    text(blocks[i], i * gridX + 2, height - (gridY * 2) - 2); // row 1
     if (row === 1) {
       i !== slot ? fill(128) : fill(228);
     } else {
-      fill(64);
+      fill(96);
     }
-    text(blocks2[i], i * gridX, height - gridY); //  row 2
+    text(blocks2[i], i * gridX + 2, height - gridY - 2); //  row 2
   }
   // set the text color again
   fill(0, 192, 255);
@@ -128,7 +159,7 @@ function mouseDragged() {
 }
 
 function paletteBox() {
-  if ((mouseX < 17 * gridX + 2) &&
+  if ((mouseX < 18 * gridX + 2) &&
     (mouseY < height - gridY) &&
     (mouseY > height - gridY * 2 - 4)) {
     // console.log("blocks selected");
@@ -137,7 +168,7 @@ function paletteBox() {
     console.log(blocks[slot]);
     brush = blocks[slot];
   }
-  if ((mouseX < 17 * gridX + 2) &&
+  if ((mouseX < 18 * gridX + 2) &&
     (mouseY < height) &&
     (mouseY > height - gridY)) {
     // console.log("blocks2 selected");
@@ -216,7 +247,11 @@ let paletteSelect = function(row) {
       break;
     case mouseX > gridX * 16 && mouseX < gridX * 17:
       slot = 16;
-      row === 0 ? console.log("slot 16") : console.log("eraser");
+      console.log("slot 16");
+      break;
+    case mouseX > gridX * 17 && mouseX < gridX * 18:
+      slot = 17;
+      row === 0 ? console.log("slot 17") : console.log("eraser");
       break;
     default:
       console.log(mouseX, '\t', mouseY);
