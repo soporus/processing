@@ -23,6 +23,7 @@
 // palettes 2 -3 pin down the useful drawing chars for these
 // add color array of same size of grid, consider 3rd array dimension
 // add ability to save, dump grid to txt
+// breaks on resize
 
 let font;
 const fontsize = 30;
@@ -60,7 +61,7 @@ const blocks = [
   '\u2593', // shade hi
   '\u2592', // shade med
   '\u2591', // shade low
-  '\u00A0' // space
+  '\u0020' // space
 ], [
   '\u2599', // L
   '\u259A', // tetris top left, bottom left
@@ -79,7 +80,7 @@ const blocks = [
   '\u2502', // vertical
   '\u2534', // top cross
   '\u252c', // bottom cross
-  '\u00A0' // space
+  '\u0020' // space
 ], [
   '\u25a0', // box arrow
   '\u25a1', // box arrow
@@ -98,7 +99,7 @@ const blocks = [
   '\u25b2', // box arrow
   '\u25bc', // box arrow
   '\u25b6', // box arrow
-  '\u00A0' // space
+  '\u0020' // space
 ], [
   '\u2b12', // triangle
   '\u2b13', // triangle
@@ -117,7 +118,7 @@ const blocks = [
   '\u2731', // triangle
   '\u2733', // triangle
   '\u273a', // triangle
-  '\u00A0' // space
+  '\u0020' // space
 ]];
 
 function preload() {
@@ -132,10 +133,10 @@ function setup() {
   }
   for (let x = 0; x < int(windowWidth / gridX); x += 1) {
     for (let y = 0; y < int(windowHeight / gridY); y += 1) {
-      grid[x][y] = ' ';
+      grid[x][y] = '\u0020';
     }
   }
-  background(0);
+  // background(0);
   noLoop();
   // Set text characteristics
   textFont(font);
@@ -181,7 +182,7 @@ function draw() {
     row === 3 ? fill(228) : fill(128);
     i === 17 ? text(arrows[1], (2 + i) * gridX, height - gridY - 2) : false; // palette down
     // set the text color again
-    fill(128, 192, 255);
+    fill(255, 255, 255);
   }
 }
 
@@ -191,6 +192,7 @@ function mousePressed() {
   redraw();
   grid[int(mouse.x / gridX)][int(mouse.y / gridY)] = brush;
   redraw();
+  // disp();
   return false;
 }
 
@@ -321,4 +323,20 @@ let paletteSelect = function(row) {
       console.log(mouseX, '\t', mouseY);
       break;
   }
+}
+
+function disp() {
+  my_window = window.open("termdraw", "myWindow1", "height=\height,width=\width");
+
+  for (let y = 0; y < int(windowHeight / gridY); y += 1) {
+    for (let x = 0; x < int(windowWidth / gridX); x += 1) {
+      (grid[x][y] === '\u0020') ? my_window.document.write('\&nbsp'): my_window.document.write(grid[x][y]);
+    }
+    my_window.document.write('\<br\>');
+  }
+}
+
+function keyPressed() {
+  if (keyCode === 83) disp();
+  // return false; // prevent default
 }
