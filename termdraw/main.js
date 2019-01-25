@@ -61,7 +61,7 @@ const blocks = [
   '\u2593', // shade hi
   '\u2592', // shade med
   '\u2591', // shade low
-  '\u0020' // space
+  '\u00a0' // space
 ], [
   '\u2599', // L
   '\u259A', // tetris top left, bottom left
@@ -80,7 +80,7 @@ const blocks = [
   '\u2502', // vertical
   '\u2534', // top cross
   '\u252c', // bottom cross
-  '\u0020' // space
+  '\u00a0' // space
 ], [
   '\u25a0', // box arrow
   '\u25a1', // box arrow
@@ -99,7 +99,7 @@ const blocks = [
   '\u25b2', // box arrow
   '\u25bc', // box arrow
   '\u25b6', // box arrow
-  '\u0020' // space
+  '\u00a0' // space
 ], [
   '\u2b12', // triangle
   '\u2b13', // triangle
@@ -118,7 +118,7 @@ const blocks = [
   '\u2731', // triangle
   '\u2733', // triangle
   '\u273a', // triangle
-  '\u0020' // space
+  '\u00a0' // space
 ]];
 
 function preload() {
@@ -133,7 +133,7 @@ function setup() {
   }
   for (let x = 0; x < int(windowWidth / gridX); x += 1) {
     for (let y = 0; y < int(windowHeight / gridY); y += 1) {
-      grid[x][y] = '\u0020';
+      grid[x][y] = '\u00a0';
     }
   }
   // background(0);
@@ -327,13 +327,30 @@ let paletteSelect = function(row) {
 
 function disp() {
   my_window = window.open("termdraw", "myWindow1", "height=\height,width=\width");
+  let HTMLstring = '<HTML>\n';
+  HTMLstring += '<HEAD>\n';
+  HTMLstring += '<TITLE>New Document</TITLE>\n';
+  HTMLstring += '</HEAD>\n';
+  HTMLstring += "<BODY bgColor='000000 '>\n";
+  HTMLstring += "<font face='monospace' size ='6' color='\#FFFFFF'>\n";
+  // my_window.document.write(HTMLstring);
+  //   for (let y = 0; y < int(windowHeight / gridY); y += 1) {
+  //     for (let x = 0; x < int(windowWidth / gridX); x += 1) {
+  //       (grid[x][y] === '\u0020') ? my_window.document.write('\&nbsp'): my_window.document.write(grid[x][y]);
+  //     }
+  //     my_window.document.write('\<br\>');
+  //   }
 
   for (let y = 0; y < int(windowHeight / gridY); y += 1) {
     for (let x = 0; x < int(windowWidth / gridX); x += 1) {
-      (grid[x][y] === '\u0020') ? my_window.document.write('\&nbsp'): my_window.document.write(grid[x][y]);
+      HTMLstring += grid[x][y];
     }
-    my_window.document.write('\<br\>');
+    HTMLstring += '<br\>';
   }
+  HTMLstring += '</font>\n';
+  HTMLstring += '</BODY>\n';
+  HTMLstring += '</HTML>';
+  my_window.document.write(HTMLstring);
 }
 
 function keyPressed() {
