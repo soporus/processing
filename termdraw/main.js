@@ -355,7 +355,9 @@ function disp() {
   HTMLstring += '<TITLE>New Document</TITLE>\n';
   HTMLstring += '</HEAD>\n';
   HTMLstring += "<BODY bgColor='000000 '>\n";
-  HTMLstring += '<p style= "color:#FFFFFF; font-family:monospace; font-size:20px;">\n';
+  HTMLstring += "<pre>\n";
+  HTMLstring += "<p style= \"color: #FFFFFF;  font-family: monospace;  font-size: ";
+  HTMLstring += int(fontsize) + "\"px;>\n";
   // my_window.document.write(HTMLstring);
   //   for (let y = 0; y < int(windowHeight / gridY); y += 1) {
   //     for (let x = 0; x < int(windowWidth / gridX); x += 1) {
@@ -366,11 +368,13 @@ function disp() {
 
   for (let y = 0; y < int(windowHeight / gridY); y += 1) {
     for (let x = 0; x < int(windowWidth / gridX); x += 1) {
-      HTMLstring += grid[x][y];
+      HTMLstring += (grid[x][y] === '\u00a0') ? "&nbsp;" : grid[x][y];
+      // HTMLstring += grid[x][y];
     }
     HTMLstring += '<br\>';
   }
   HTMLstring += '</p>\n';
+  HTMLstring += "</pre>\n";
   HTMLstring += '</BODY>\n';
   HTMLstring += '</HTML>';
   my_window.document.write(HTMLstring);
