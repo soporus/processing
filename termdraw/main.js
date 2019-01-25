@@ -355,7 +355,7 @@ function disp() {
   HTMLstring += '<TITLE>New Document</TITLE>\n';
   HTMLstring += '</HEAD>\n';
   HTMLstring += "<BODY bgColor='000000 '>\n";
-  HTMLstring += '<p style= "color:#FFFFFF; font-family:monospace; font-size:12px;">\n';
+  HTMLstring += '<p style= "color:#FFFFFF; font-family:monospace; font-size:20px;">\n';
   // my_window.document.write(HTMLstring);
   //   for (let y = 0; y < int(windowHeight / gridY); y += 1) {
   //     for (let x = 0; x < int(windowWidth / gridX); x += 1) {
