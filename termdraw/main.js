@@ -24,15 +24,14 @@
 // add color array of same size of grid, consider 3rd array dimension
 // add ability to save, dump grid to txt
 // breaks on resize
-
+let fontsize;
+let gapX = 0;
+let gridX = 0;
+let gapY = 0;
+let gridY = 0;
 let font;
-const fontsize = 30;
-const gapX = -fontsize * 0.35;
-const gridX = fontsize + gapX;
-const gapY = fontsize * 0.2;
-const gridY = fontsize + gapY;
 let mouse = new p5.Vector(0, 0);
-let slot = 5;
+let slot = 4;
 let row = 0;
 let brush = '\u2588';
 let grid = [];
@@ -127,6 +126,11 @@ function preload() {
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
+  fontsize = windowWidth / 14;
+  gapX = -fontsize * 0.35;
+  gridX = fontsize + gapX;
+  gapY = fontsize * 0.2;
+  gridY = fontsize + gapY;
   // build canvas array.  2D, must be grid of width/gridx height/gridy
   for (let x = 0; x < int(windowWidth / gridX); x++) {
     grid[x] = [int(windowHeight / gridY)];
@@ -148,7 +152,7 @@ function setup() {
 
 function draw() {
   background(0);
-  mouse.x = int(mouseX / gridX) * gridX;
+  mouse.x = ((mouseX / gridX) * gridX < width) ? int(mouseX / gridX) * gridX : mouse.x;
   mouse.y = int(mouseY / gridY) * gridY;
   // draw the art, from the grid array
   for (let x = 0; x < int(windowWidth / gridX); x += 1) {
@@ -182,27 +186,45 @@ function draw() {
     row === 3 ? fill(228) : fill(128);
     i === 17 ? text(arrows[1], (2 + i) * gridX, height - gridY - 2) : false; // palette down
     // set the text color again
-    fill(255, 255, 255);
+
   }
+  fill(128, 0, 128);
+  text('\u23CF', width - (gridX + 2), 0);
+  fill(255);
 }
 
 function mousePressed() {
+  eject();
   paletteShift();
   paletteBox();
   redraw();
-  grid[int(mouse.x / gridX)][int(mouse.y / gridY)] = brush;
+  if (int(mouse.x / gridX) < width / gridX) {
+    grid[int(mouse.x / gridX)][int(mouse.y / gridY)] = brush;
+  }
   redraw();
   // disp();
   return false;
 }
 
 function mouseDragged() {
-  // paletteShift();
   paletteBox();
   redraw();
-  grid[int(mouse.x / gridX)][int(mouse.y / gridY)] = brush;
+  if (int(mouse.x / gridX) < width) {
+    grid[int(mouse.x / gridX)][int(mouse.y / gridY)] = brush;
+  }
   redraw();
   return false;
+}
+
+function eject() {
+  if (mouseX >= width - (gridX + 2)) {
+    if (mouseY <= gridY) {
+      disp();
+    }
+  }
+
+  // text('\u23CF', width - (gridX + 2), 0);
+
 }
 
 function paletteShift() {
@@ -327,12 +349,13 @@ let paletteSelect = function(row) {
 
 function disp() {
   my_window = window.open("termdraw", "myWindow1", "height=\height,width=\width");
-  let HTMLstring = '<HTML>\n';
+  let HTMLstring = "<!DOCTYPE html>\n";
+  HTMLstring = '<HTML>\n';
   HTMLstring += '<HEAD>\n';
   HTMLstring += '<TITLE>New Document</TITLE>\n';
   HTMLstring += '</HEAD>\n';
   HTMLstring += "<BODY bgColor='000000 '>\n";
-  HTMLstring += "<font face='monospace' size ='6' color='\#FFFFFF'>\n";
+  HTMLstring += '<p style= "color:#FFFFFF; font-family:monospace; font-size:10px;">\n';
   // my_window.document.write(HTMLstring);
   //   for (let y = 0; y < int(windowHeight / gridY); y += 1) {
   //     for (let x = 0; x < int(windowWidth / gridX); x += 1) {
@@ -347,7 +370,7 @@ function disp() {
     }
     HTMLstring += '<br\>';
   }
-  HTMLstring += '</font>\n';
+  HTMLstring += '</p>\n';
   HTMLstring += '</BODY>\n';
   HTMLstring += '</HTML>';
   my_window.document.write(HTMLstring);
