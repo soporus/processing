@@ -126,7 +126,7 @@ function preload() {
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
-  fontsize = windowWidth / 14;
+  fontsize = windowHeight / 28;
   gapX = -fontsize * 0.35;
   gridX = fontsize + gapX;
   gapY = fontsize * 0.2;
@@ -140,20 +140,22 @@ function setup() {
       grid[x][y] = '\u00a0';
     }
   }
-  // background(0);
   noLoop();
   // Set text characteristics
   textFont(font);
   textSize(fontsize);
   textAlign(LEFT, TOP);
-  // fill(128, 192, 255);
   rectMode(CORNERS);
 }
 
 function draw() {
   background(0);
-  mouse.x = ((mouseX / gridX) * gridX < width) ? int(mouseX / gridX) * gridX : mouse.x;
-  mouse.y = int(mouseY / gridY) * gridY;
+  mouse.x = ((mouseX / gridX) * gridX < width) ? (mouseX / gridX) * gridX : mouse.x;
+  // mouse.x = (mouse.x < fontsize / 2) ? 0 : int(mouse.x);
+  // mouse.x = Math.floor(mouse.x);
+  // console.log(mouse.x);
+  // mouse.x < int(mouseX / gridX) * gridX : mouse.x;
+  mouse.y = mouseY / gridY * gridY;
   // draw the art, from the grid array
   for (let x = 0; x < int(windowWidth / gridX); x += 1) {
     for (let y = 0; y < int(windowHeight / gridY); y += 1) {
@@ -169,7 +171,6 @@ function draw() {
   fill(0);
   rect(19 * gridX - 3, height - gridY * 2 - 4, (19 * gridX) + gridX + 1, height);
   noStroke();
-  // noFill();
   //draw the palette
   for (let i = 0; i < 18; i++) {
     if (row === 0) {
@@ -186,9 +187,8 @@ function draw() {
     row === 3 ? fill(228) : fill(128);
     i === 17 ? text(arrows[1], (2 + i) * gridX, height - gridY - 2) : false; // palette down
     // set the text color again
-
   }
-  fill(128, 0, 128);
+  fill(0, 160, 192);
   text('\u23CF', width - (gridX + 2), 0);
   fill(255);
 }
@@ -198,19 +198,26 @@ function mousePressed() {
   paletteShift();
   paletteBox();
   redraw();
-  if (int(mouse.x / gridX) < width / gridX) {
-    grid[int(mouse.x / gridX)][int(mouse.y / gridY)] = brush;
+  if (mouse.x >= 0 &&
+    mouse.y >= 0 &&
+    mouse.y < Math.floor(gridY * 21)) {
+    if (mouse.x < width - gridX - 4 && mouse.y < height - gridY * 2) {
+      grid[int(mouse.x / gridX)][Math.floor(mouse.y / gridY)] = brush;
+    }
   }
   redraw();
-  // disp();
   return false;
 }
 
 function mouseDragged() {
   paletteBox();
   redraw();
-  if (int(mouse.x / gridX) < width) {
-    grid[int(mouse.x / gridX)][int(mouse.y / gridY)] = brush;
+  if (mouse.x >= 0 &&
+    mouse.y >= 0 &&
+    mouse.y < Math.floor(gridY * 21)) {
+    if (mouse.x < width - gridX - 4 && mouse.y < height - gridY * 2) {
+      grid[int(mouse.x / gridX)][Math.floor(mouse.y / gridY)] = brush;
+    }
   }
   redraw();
   return false;
@@ -218,13 +225,10 @@ function mouseDragged() {
 
 function eject() {
   if (mouseX >= width - (gridX + 2)) {
-    if (mouseY <= gridY) {
+    if (mouseY <= gridY && mouseX < width) {
       disp();
     }
   }
-
-  // text('\u23CF', width - (gridX + 2), 0);
-
 }
 
 function paletteShift() {
@@ -339,7 +343,7 @@ let paletteSelect = function(row) {
       break;
     case mouseX > gridX * 17 && mouseX < gridX * 18:
       slot = 17;
-      row === 0 ? console.log("slot 17") : console.log("eraser");
+      console.log("eraser");
       break;
     default:
       console.log(mouseX, '\t', mouseY);
@@ -352,12 +356,13 @@ function disp() {
   let HTMLstring = "<!DOCTYPE html>\n";
   HTMLstring = '<HTML>\n';
   HTMLstring += '<HEAD>\n';
-  HTMLstring += '<TITLE>New Document</TITLE>\n';
+  HTMLstring += "<TITLE>░░░░▒▒▒▓▓▛▀▔✺▁▄▟▓▓▒▒▒░░░░</TITLE>\n";
   HTMLstring += '</HEAD>\n';
   HTMLstring += "<BODY bgColor='000000 '>\n";
   HTMLstring += "<pre>\n";
-  HTMLstring += "<p style= \"color: #FFFFFF;  font-family: monospace;  font-size: ";
-  HTMLstring += int(fontsize) + "\"px;>\n";
+  HTMLstring +=
+    "<p style= \"color: #FFFFFF;  font-family:monospace;  font-size: ";
+  HTMLstring += int(fontsize) + "px;\">\n";
   // my_window.document.write(HTMLstring);
   //   for (let y = 0; y < int(windowHeight / gridY); y += 1) {
   //     for (let x = 0; x < int(windowWidth / gridX); x += 1) {
@@ -368,10 +373,9 @@ function disp() {
 
   for (let y = 0; y < int(windowHeight / gridY); y += 1) {
     for (let x = 0; x < int(windowWidth / gridX); x += 1) {
-      HTMLstring += (grid[x][y] === '\u00a0') ? "&nbsp;" : grid[x][y];
-      // HTMLstring += grid[x][y];
+      HTMLstring += grid[x][y];
     }
-    HTMLstring += '<br\>';
+    HTMLstring += '<br \\>';
   }
   HTMLstring += '</p>\n';
   HTMLstring += "</pre>\n";
