@@ -20,6 +20,7 @@
 // ▙░▄░▄░▄░▟▀▙▁▏▕▁▟▕▏▙▁▏▕▁▟▀▙░▄░▄░▄░▟▏
 // ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔
 // to do:
+//
 // palettes 2 -3 pin down the useful drawing chars for these
 // add color array of same size of grid, consider 3rd array dimension
 // add ability to save, dump grid to txt
@@ -30,7 +31,7 @@ let gridX = 0;
 let gapY = 0;
 let gridY = 0;
 let font;
-let mouse = new p5.Vector(0, 0);
+// let mouse = new p5.Vector(0.0, 0.0);
 let slot = 4;
 let row = 0;
 let brush = '\u2588';
@@ -131,12 +132,14 @@ function setup() {
   gridX = fontsize + gapX;
   gapY = fontsize * 0.2;
   gridY = fontsize + gapY;
+  hLimit = windowHeight / gridY;
+  wLimit = windowWidth / gridX;
   // build canvas array.  2D, must be grid of width/gridx height/gridy
-  for (let x = 0; x < int(windowWidth / gridX); x++) {
-    grid[x] = [int(windowHeight / gridY)];
+  for (let x = 0; x < wLimit; x++) {
+    grid[x] = [~~hLimit];
   }
-  for (let x = 0; x < int(windowWidth / gridX); x += 1) {
-    for (let y = 0; y < int(windowHeight / gridY); y += 1) {
+  for (let x = 0; x < wLimit; x += 1) {
+    for (let y = 0; y < hLimit; y += 1) {
       grid[x][y] = '\u00a0';
     }
   }
@@ -150,15 +153,9 @@ function setup() {
 
 function draw() {
   background(0);
-  mouse.x = ((mouseX / gridX) * gridX < width) ? (mouseX / gridX) * gridX : mouse.x;
-  // mouse.x = (mouse.x < fontsize / 2) ? 0 : int(mouse.x);
-  // mouse.x = Math.floor(mouse.x);
-  // console.log(mouse.x);
-  // mouse.x < int(mouseX / gridX) * gridX : mouse.x;
-  mouse.y = mouseY / gridY * gridY;
-  // draw the art, from the grid array
-  for (let x = 0; x < int(windowWidth / gridX); x += 1) {
-    for (let y = 0; y < int(windowHeight / gridY); y += 1) {
+  // draw the art, from the grid array.
+  for (let x = 0; x < wLimit; x += 1) {
+    for (let y = 0; y < hLimit; y += 1) {
       text(grid[x][y], x * gridX, y * gridY);
     }
   }
@@ -197,12 +194,11 @@ function mousePressed() {
   eject();
   paletteShift();
   paletteBox();
-  redraw();
-  if (mouse.x >= 0 &&
-    mouse.y >= 0 &&
-    mouse.y < Math.floor(gridY * 21)) {
-    if (mouse.x < width - gridX - 4 && mouse.y < height - gridY * 2) {
-      grid[int(mouse.x / gridX)][Math.floor(mouse.y / gridY)] = brush;
+  if (mouseX >= 0 &&
+    mouseY >= 0 &&
+    mouseY < ~~(gridY * 21)) {
+    if (mouseX < width - gridX - 4 && mouseY < height - gridY * 2) {
+      grid[~~(mouseX / gridX)][~~(mouseY / gridY)] = brush;
     }
   }
   redraw();
@@ -211,12 +207,11 @@ function mousePressed() {
 
 function mouseDragged() {
   paletteBox();
-  redraw();
-  if (mouse.x >= 0 &&
-    mouse.y >= 0 &&
-    mouse.y < Math.floor(gridY * 21)) {
-    if (mouse.x < width - gridX - 4 && mouse.y < height - gridY * 2) {
-      grid[int(mouse.x / gridX)][Math.floor(mouse.y / gridY)] = brush;
+  if (mouseX >= 0 &&
+    mouseY >= 0 &&
+    mouseY < ~~(gridY * 21)) {
+    if (mouseX < width - gridX - 4 && mouseY < height - gridY * 2) {
+      grid[~~(mouseX / gridX)][~~(mouseY / gridY)] = brush;
     }
   }
   redraw();
@@ -239,7 +234,6 @@ function paletteShift() {
     row = 2;
     rowA > 0 ? rowA -= 1 : rowA = 3;
     rowB > 0 ? rowB -= 1 : rowB = 3;
-    console.log("pallete switched up\t", rowA, '\t', rowB);
   }
   if ((mouseX > 19 * gridX) &&
     (mouseX < 20 * gridX) &&
@@ -248,7 +242,6 @@ function paletteShift() {
     row = 3;
     rowA < 3 ? rowA += 1 : rowA = 0;
     rowB < 3 ? rowB += 1 : rowB = 0;
-    console.log("pallete switched down\t", rowA, '\t', rowB);
   }
 }
 
@@ -258,7 +251,6 @@ function paletteBox() {
     (mouseY > height - gridY * 2 - 4)) {
     row = 0;
     paletteSelect(row);
-    console.log(blocks[rowA][slot]);
     brush = blocks[rowA][slot];
   }
   if ((mouseX < 18 * gridX + 2) &&
@@ -266,7 +258,6 @@ function paletteBox() {
     (mouseY > height - gridY)) {
     row = 1;
     paletteSelect(row);
-    console.log(blocks[rowB][slot]);
     brush = blocks[rowB][slot];
   }
 }
@@ -275,78 +266,59 @@ let paletteSelect = function(row) {
   switch (true) {
     case mouseX < gridX:
       slot = 0;
-      console.log("slot 0");
       break;
     case mouseX > gridX && mouseX < gridX * 2:
       slot = 1;
-      console.log("slot 1");
       break;
     case mouseX > gridX * 2 && mouseX < gridX * 3:
       slot = 2;
-      console.log("slot 2");
       break;
     case mouseX > gridX * 3 && mouseX < gridX * 4:
       slot = 3;
-      console.log("slot 3");
       break;
     case mouseX > gridX * 4 && mouseX < gridX * 5:
       slot = 4;
-      console.log("slot 4");
       break;
     case mouseX > gridX * 5 && mouseX < gridX * 6:
       slot = 5;
-      console.log("slot 5");
       break;
     case mouseX > gridX * 6 && mouseX < gridX * 7:
       slot = 6;
-      console.log("slot 6");
       break;
     case mouseX > gridX * 7 && mouseX < gridX * 8:
       slot = 7;
-      console.log("slot 7");
       break;
     case mouseX > gridX * 8 && mouseX < gridX * 9:
       slot = 8;
-      console.log("slot 8");
       break;
     case mouseX > gridX * 9 && mouseX < gridX * 10:
       slot = 9;
-      console.log("slot 9");
       break;
     case mouseX > gridX * 10 && mouseX < gridX * 11:
       slot = 10;
-      console.log("slot 10");
       break;
     case mouseX > gridX * 11 && mouseX < gridX * 12:
       slot = 11;
-      console.log("slot 11");
       break;
     case mouseX > gridX * 12 && mouseX < gridX * 13:
       slot = 12;
-      console.log("slot 12");
       break;
     case mouseX > gridX * 13 && mouseX < gridX * 14:
       slot = 13;
-      console.log("slot 13");
       break;
     case mouseX > gridX * 14 && mouseX < gridX * 15:
       slot = 14;
-      console.log("slot 14");
       break;
     case mouseX > gridX * 15 && mouseX < gridX * 16:
       slot = 15;
-      console.log("slot 15");
       break;
     case mouseX > gridX * 16 && mouseX < gridX * 17:
       slot = 16;
-      console.log("slot 16");
       break;
     case mouseX > gridX * 17 && mouseX < gridX * 18:
       slot = 17;
-      console.log("eraser");
       break;
     default:
-      console.log(mouseX, '\t', mouseY);
       break;
   }
 }
@@ -362,17 +334,9 @@ function disp() {
   HTMLstring += "<pre>\n";
   HTMLstring +=
     "<p style= \"color: #FFFFFF;  font-family:monospace;  font-size: ";
-  HTMLstring += int(fontsize) + "px;\">\n";
-  // my_window.document.write(HTMLstring);
-  //   for (let y = 0; y < int(windowHeight / gridY); y += 1) {
-  //     for (let x = 0; x < int(windowWidth / gridX); x += 1) {
-  //       (grid[x][y] === '\u0020') ? my_window.document.write('\&nbsp'): my_window.document.write(grid[x][y]);
-  //     }
-  //     my_window.document.write('\<br\>');
-  //   }
-
-  for (let y = 0; y < int(windowHeight / gridY); y += 1) {
-    for (let x = 0; x < int(windowWidth / gridX); x += 1) {
+  HTMLstring += ~~fontsize + "px;\">\n";
+  for (let y = 0; y < hLimit; y += 1) {
+    for (let x = 0; x < wLimit; x += 1) {
       HTMLstring += grid[x][y];
     }
     HTMLstring += '<br \\>';
