@@ -137,7 +137,7 @@ function setup() {
   // gridX = 16;
   // gapY = fontsize * 0.2;
   gapY = fontsize >> 2;
-  gridY = fontsize + gapY - 2;
+  gridY = fontsize + gapY;
   // gridY = 30;
   hLimit = ~~(windowHeight / gridY);
   wLimit = ~~(windowWidth / gridX);
