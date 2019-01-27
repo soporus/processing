@@ -127,16 +127,23 @@ function preload() {
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
-  fontsize = windowHeight / 28;
-  gapX = -fontsize * 0.35;
-  gridX = fontsize + gapX;
-  gapY = fontsize * 0.2;
-  gridY = fontsize + gapY;
-  hLimit = windowHeight / gridY;
-  wLimit = windowWidth / gridX;
+  // fontsize = windowHeight / 28;
+  fontsize = (windowHeight >> 6) * 2.75;
+  console.log(windowHeight >> 6);
+  // gapX = -fontsize * 0.35;
+  gapX = -fontsize >> 2;
+  // gapX = -8;
+  gridX = fontsize + gapX - 2;
+  // gridX = 16;
+  // gapY = fontsize * 0.2;
+  gapY = fontsize >> 2;
+  gridY = fontsize + gapY - 2;
+  // gridY = 30;
+  hLimit = ~~(windowHeight / gridY);
+  wLimit = ~~(windowWidth / gridX);
   // build canvas array.  2D, must be grid of width/gridx height/gridy
   for (let x = 0; x < wLimit; x++) {
-    grid[x] = [~~hLimit];
+    grid[x] = [hLimit];
   }
   for (let x = 0; x < wLimit; x += 1) {
     for (let y = 0; y < hLimit; y += 1) {
@@ -154,11 +161,13 @@ function setup() {
 function draw() {
   background(0);
   // draw the art, from the grid array.
-  for (let x = 0; x < wLimit; x += 1) {
-    for (let y = 0; y < hLimit; y += 1) {
+  for (let x = 0; x < wLimit; ++x) {
+    for (let y = 0; y < hLimit; ++y) {
       text(grid[x][y], x * gridX, y * gridY);
     }
   }
+  // console.log('font size: ', fontsize, '\ngridX: ', gridX, '\tgridY: ', gridY,
+  //   '\ngapX: ', gapX, '\tgapY: ', gapY);
   // background for palette (dark blue rectangle)
   fill(0, 16, 32);
   strokeWeight(2);
@@ -169,36 +178,40 @@ function draw() {
   rect(19 * gridX - 3, height - gridY * 2 - 4, (19 * gridX) + gridX + 1, height);
   noStroke();
   //draw the palette
-  for (let i = 0; i < 18; i++) {
+  for (let i = 0; i < 18; ++i) {
     if (row === 0) {
       i !== slot ? fill(128) : fill(228);
     } else fill(128);
     // highlight slot
-    text(blocks[rowA][i], i * gridX + 2, height - (gridY * 2) - 2); // row 1
+    text(blocks[rowA][i], i * gridX, height - (gridY * 2) - 2); // row 1
     row === 2 ? fill(228) : fill(128);
     i === 17 ? text(arrows[0], (2 + i) * gridX, height - (gridY * 2) - 2) : false; //palette up
     if (row === 1) {
       i !== slot ? fill(128) : fill(228);
     } else fill(128);
-    text(blocks[rowB][i], i * gridX + 2, height - gridY - 2); //  row 2
+    text(blocks[rowB][i], i * gridX, height - gridY - 2); //  row 2
     row === 3 ? fill(228) : fill(128);
     i === 17 ? text(arrows[1], (2 + i) * gridX, height - gridY - 2) : false; // palette down
-    // set the text color again
   }
-  fill(0, 160, 192);
+  fill(192, 160, 192);
   text('\u23CF', width - (gridX + 2), 0);
   fill(255);
 }
 
 function mousePressed() {
   eject();
-  paletteShift();
-  paletteBox();
-  if (mouseX >= 0 &&
-    mouseY >= 0 &&
-    mouseY < ~~(gridY * 21)) {
-    if (mouseX < width - gridX - 4 && mouseY < height - gridY * 2) {
-      grid[~~(mouseX / gridX)][~~(mouseY / gridY)] = brush;
+  if (!paletteShift()) {
+    if (!paletteBox()) {
+      if (mouseX > 0) {
+        if (mouseY > 0) {
+          if (mouseY < gridY * 19) {
+            if (mouseX < width - gridX * 1.5) {
+              grid[~~(mouseX / gridX)][~~(mouseY / gridY)] = brush;
+              return redraw();
+            }
+          }
+        }
+      }
     }
   }
   redraw();
@@ -206,63 +219,71 @@ function mousePressed() {
 }
 
 function mouseDragged() {
-  paletteBox();
-  if (mouseX >= 0 &&
-    mouseY >= 0 &&
-    mouseY < ~~(gridY * 21)) {
-    if (mouseX < width - gridX - 4 && mouseY < height - gridY * 2) {
-      grid[~~(mouseX / gridX)][~~(mouseY / gridY)] = brush;
+  if (!paletteBox()) {
+    if (mouseX > 0) {
+      if (mouseY > 0) {
+        if (mouseY < gridY * 19) {
+          if (mouseX < width - gridX * 1.5) {
+            grid[~~(mouseX / gridX)][~~(mouseY / gridY)] = brush;
+            return redraw();
+          }
+        }
+      }
     }
   }
-  redraw();
   return false;
 }
 
-function eject() {
-  if (mouseX >= width - (gridX + 2)) {
+const eject = function() {
+  if (mouseX >= width - (gridX)) {
     if (mouseY <= gridY && mouseX < width) {
       disp();
     }
   }
 }
 
-function paletteShift() {
-  if ((mouseX > 19 * gridX) &&
-    (mouseX < 20 * gridX) &&
-    (mouseY < height - gridY) &&
-    (mouseY > height - gridY * 2 - 4)) {
-    row = 2;
-    rowA > 0 ? rowA -= 1 : rowA = 3;
-    rowB > 0 ? rowB -= 1 : rowB = 3;
+const paletteShift = function() {
+  if (mouseY > height - gridY * 2) {
+    if (mouseX > 19 * gridX) {
+      if (mouseX < 20 * gridX) {
+        if (mouseY < height - gridY) {
+          row = 2;
+          rowA > 0 ? rowA -= 1 : rowA = 3;
+          rowB > 0 ? rowB -= 1 : rowB = 3;
+          return true;
+        } else {
+          row = 3;
+          rowA < 3 ? rowA += 1 : rowA = 0;
+          rowB < 3 ? rowB += 1 : rowB = 0;
+          return true;
+        }
+      }
+    }
   }
-  if ((mouseX > 19 * gridX) &&
-    (mouseX < 20 * gridX) &&
-    (mouseY < height) &&
-    (mouseY > height - gridY)) {
-    row = 3;
-    rowA < 3 ? rowA += 1 : rowA = 0;
-    rowB < 3 ? rowB += 1 : rowB = 0;
-  }
+  return false;
 }
-
-function paletteBox() {
-  if ((mouseX < 18 * gridX + 2) &&
-    (mouseY < height - gridY) &&
-    (mouseY > height - gridY * 2 - 4)) {
-    row = 0;
-    paletteSelect(row);
-    brush = blocks[rowA][slot];
+const paletteBox = function() {
+  if (mouseX < 18 * gridX) {
+    if (mouseY < height - gridY) {
+      if (mouseY > height - gridY * 2 - 4) {
+        row = 0;
+        paletteSelect(row);
+        brush = blocks[rowA][slot];
+        return true;
+      }
+    }
+    if (mouseY < height) {
+      if (mouseY > height - gridY) {
+        row = 1;
+        paletteSelect(row);
+        brush = blocks[rowB][slot];
+        return true;
+      }
+    }
   }
-  if ((mouseX < 18 * gridX + 2) &&
-    (mouseY < height) &&
-    (mouseY > height - gridY)) {
-    row = 1;
-    paletteSelect(row);
-    brush = blocks[rowB][slot];
-  }
+  return false
 }
-
-let paletteSelect = function(row) {
+const paletteSelect = function(row) {
   switch (true) {
     case mouseX < gridX:
       slot = 0;
@@ -323,20 +344,20 @@ let paletteSelect = function(row) {
   }
 }
 
-function disp() {
-  my_window = window.open("termdraw", "myWindow1", "height=\height,width=\width");
+const disp = function() {
+  let my_window = window.open("termdraw", "myWindow1", "height=\height,width=\width");
   let HTMLstring = "<!DOCTYPE html>\n";
   HTMLstring = '<HTML>\n';
   HTMLstring += '<HEAD>\n';
   HTMLstring += "<TITLE>░░░░▒▒▒▓▓▛▀▔✺▁▄▟▓▓▒▒▒░░░░</TITLE>\n";
   HTMLstring += '</HEAD>\n';
   HTMLstring += "<BODY bgColor='000000 '>\n";
-  HTMLstring += "<pre>\n";
+  HTMLstring += "<pre>";
   HTMLstring +=
     "<p style= \"color: #FFFFFF;  font-family:monospace;  font-size: ";
-  HTMLstring += ~~fontsize + "px;\">\n";
-  for (let y = 0; y < hLimit; y += 1) {
-    for (let x = 0; x < wLimit; x += 1) {
+  HTMLstring += ~~fontsize + "px;\">";
+  for (let y = 0; y < hLimit; ++y) {
+    for (let x = 0; x < wLimit; ++x) {
       HTMLstring += grid[x][y];
     }
     HTMLstring += '<br \\>';
