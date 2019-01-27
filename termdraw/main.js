@@ -152,6 +152,7 @@ function setup() {
   }
   noLoop();
   // Set text characteristics
+  noStroke();
   textFont(font);
   textSize(fontsize);
   textAlign(LEFT, TOP);
@@ -169,14 +170,11 @@ function draw() {
   // console.log('font size: ', fontsize, '\ngridX: ', gridX, '\tgridY: ', gridY,
   //   '\ngapX: ', gapX, '\tgapY: ', gapY);
   // background for palette (dark blue rectangle)
-  fill(0, 16, 32);
-  strokeWeight(2);
-  stroke(64);
+  fill(0, 32, 64);
   // rect x, y, width, height
   rect(0, height - gridY * 2 - 4, 18 * gridX + 2, height); //clean this up
-  fill(0, 16, 32);
+  fill(0, 32, 64);
   rect(19 * gridX - 3, height - gridY * 2 - 4, (19 * gridX) + gridX + 1, height);
-  noStroke();
   //draw the palette
   for (let i = 0; i < 18; ++i) {
     if (row === 0) {
