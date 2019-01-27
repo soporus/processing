@@ -207,7 +207,6 @@ function mousePressed() {
           if (mouseY < gridY * 19) {
             if (mouseX < width - gridX * 1.5) {
               grid[~~(mouseX / gridX)][~~(mouseY / gridY)] = brush;
-              return redraw();
             }
           }
         }
@@ -225,12 +224,12 @@ function mouseDragged() {
         if (mouseY < gridY * 19) {
           if (mouseX < width - gridX * 1.5) {
             grid[~~(mouseX / gridX)][~~(mouseY / gridY)] = brush;
-            return redraw();
           }
         }
       }
     }
   }
+  redraw();
   return false;
 }
 
