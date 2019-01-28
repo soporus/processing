@@ -30,7 +30,7 @@ let gapX = 0;
 let gridX = 0;
 let gapY = 0;
 let gridY = 0;
-let font;
+// let font;
 // let mouse = new p5.Vector(0.0, 0.0);
 let slot = 4;
 let row = 0;
@@ -121,9 +121,9 @@ const blocks = [
   '\u00a0' // space
 ]];
 
-function preload() {
-  font = loadFont("assets/DejaVuSansMono.ttf");
-}
+// function preload() {
+//   font = loadFont("assets/DejaVuSansMono.ttf");
+// }
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
@@ -132,7 +132,7 @@ function setup() {
   // gapX = -fontsize * 0.35;
   gapX = -fontsize >> 2;
   // gapX = -8;
-  gridX = fontsize + gapX - 2;
+  gridX = fontsize + gapX + 2;
   // gridX = 16;
   // gapY = fontsize * 0.2;
   gapY = fontsize >> 2;
@@ -152,7 +152,7 @@ function setup() {
   noLoop();
   // Set text characteristics
   noStroke();
-  textFont(font);
+  // textFont(font);
   textSize(fontsize);
   textAlign(LEFT, TOP);
   rectMode(CORNERS);
@@ -173,32 +173,31 @@ function draw() {
     while (indexY--) {
       text(grid[indexX][indexY], indexX * gridX, indexY * gridY);
     }
-    // ++indexX;
   }
   // background for palette (dark blue rectangle)
   fill(0, 32, 64);
   // rect x, y, width, height
-  rect(0, height - gridY * 2 - 4, 18 * gridX + 2, height); //clean this up
-  fill(0, 32, 64);
-  rect(19 * gridX - 3, height - gridY * 2 - 4, (19 * gridX) + gridX + 1, height);
+  rect(0, (height - (gridY * 2)) - 6, width, height); //clean this up
+  // fill(0, 32, 64);
+  // rect(19 * gridX, (height - (gridY * 2)) - 4, (20 * gridX), height);
   //draw the palette
   for (let i = 0; i < 18; ++i) {
     if (row === 0) {
       i !== slot ? fill(128) : fill(228);
     } else fill(128);
     // highlight slot
-    text(blocks[rowA][i], i * gridX, height - (gridY * 2) - 2); // row 1
+    text(blocks[rowA][i], i * gridX, height - (gridY * 2)); // row 1
     row === 2 ? fill(228) : fill(128);
-    i === 17 ? text(arrows[0], (2 + i) * gridX, height - (gridY * 2) - 2) : false; //palette up
+    i === 17 ? text(arrows[0], (2 + i) * gridX, height - (gridY * 2)) : false; //palette up
     if (row === 1) {
       i !== slot ? fill(128) : fill(228);
     } else fill(128);
-    text(blocks[rowB][i], i * gridX, height - gridY - 2); //  row 2
+    text(blocks[rowB][i], i * gridX, height - gridY); //  row 2
     row === 3 ? fill(228) : fill(128);
-    i === 17 ? text(arrows[1], (2 + i) * gridX, height - gridY - 2) : false; // palette down
+    i === 17 ? text(arrows[1], (2 + i) * gridX, height - gridY) : false; // palette down
   }
   fill(192, 160, 192);
-  text('\u23CF', width - (gridX + 2), 0);
+  text('\u23CF', width - gridX, 0);
   fill(255);
 }
 
@@ -222,7 +221,6 @@ function mousePressed() {
 }
 
 function mouseDragged() {
-  // if (!paletteBox()) {
   if (mouseX > 0) {
     if (mouseY > 0) {
       if (mouseY < gridY * 17) {
@@ -232,7 +230,6 @@ function mouseDragged() {
       }
     }
   }
-  // }
   redraw();
   return false;
 }
@@ -268,7 +265,7 @@ const paletteShift = function() {
 const paletteBox = function() {
   if (mouseX < 18 * gridX) {
     if (mouseY < height - gridY) {
-      if (mouseY > height - gridY * 2 - 4) {
+      if (mouseY > height - gridY * 2) {
         row = 0;
         paletteSelect(row);
         brush = blocks[rowA][slot];
