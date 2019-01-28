@@ -129,7 +129,6 @@ function setup() {
   createCanvas(windowWidth, windowHeight);
   // fontsize = windowHeight / 28;
   fontsize = (windowHeight >> 6) * 2.75;
-  console.log(windowHeight >> 6);
   // gapX = -fontsize * 0.35;
   gapX = -fontsize >> 2;
   // gapX = -8;
@@ -142,11 +141,11 @@ function setup() {
   hLimit = ~~(windowHeight / gridY);
   wLimit = ~~(windowWidth / gridX);
   // build canvas array.  2D, must be grid of width/gridx height/gridy
-  for (let x = 0; x < wLimit; x++) {
+  for (let x = 0; x < wLimit; ++x) {
     grid[x] = [hLimit];
   }
-  for (let x = 0; x < wLimit; x += 1) {
-    for (let y = 0; y < hLimit; y += 1) {
+  for (let x = 0; x < wLimit; ++x) {
+    for (let y = 0; y < hLimit; ++y) {
       grid[x][y] = '\u00a0';
     }
   }
@@ -162,13 +161,20 @@ function setup() {
 function draw() {
   background(0);
   // draw the art, from the grid array.
-  for (let x = 0; x < wLimit; ++x) {
-    for (let y = 0; y < hLimit; ++y) {
-      text(grid[x][y], x * gridX, y * gridY);
+  // for (let x = 0; x < wLimit; ++x) {
+  //   for (let y = 0; y < hLimit; ++y) {
+  //     text(grid[x][y], x * gridX, y * gridY);
+  //   }
+  // }
+  let indexX = wLimit;
+  let indexY = hLimit;
+  while (indexX--) {
+    indexY = hLimit;
+    while (indexY--) {
+      text(grid[indexX][indexY], indexX * gridX, indexY * gridY);
     }
+    // ++indexX;
   }
-  // console.log('font size: ', fontsize, '\ngridX: ', gridX, '\tgridY: ', gridY,
-  //   '\ngapX: ', gapX, '\tgapY: ', gapY);
   // background for palette (dark blue rectangle)
   fill(0, 32, 64);
   // rect x, y, width, height
@@ -202,7 +208,7 @@ function mousePressed() {
     if (!paletteBox()) {
       if (mouseX > 0) {
         if (mouseY > 0) {
-          if (mouseY < gridY * 19) {
+          if (mouseY < gridY * 17) {
             if (mouseX < width - gridX * 1.5) {
               grid[~~(mouseX / gridX)][~~(mouseY / gridY)] = brush;
             }
@@ -216,17 +222,17 @@ function mousePressed() {
 }
 
 function mouseDragged() {
-  if (!paletteBox()) {
-    if (mouseX > 0) {
-      if (mouseY > 0) {
-        if (mouseY < gridY * 19) {
-          if (mouseX < width - gridX * 1.5) {
-            grid[~~(mouseX / gridX)][~~(mouseY / gridY)] = brush;
-          }
+  // if (!paletteBox()) {
+  if (mouseX > 0) {
+    if (mouseY > 0) {
+      if (mouseY < gridY * 17) {
+        if (mouseX < width - gridX * 1.5) {
+          grid[~~(mouseX / gridX)][~~(mouseY / gridY)] = brush;
         }
       }
     }
   }
+  // }
   redraw();
   return false;
 }
