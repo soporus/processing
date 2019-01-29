@@ -58,7 +58,7 @@ const blocks = [
   '\u259d', //small upper right
   '\u2595', //tall thin right
   '\u2590', //tall half right
-  '\u2593', // shade hi
+  '\u2593\uFE0E', // shade hi
   '\u2592', // shade med
   '\u2591', // shade low
   '\u00a0' // space
@@ -95,10 +95,10 @@ const blocks = [
   '\u25f1', // box arrow
   '\u25f2', // box arrow
   '\u25f3', // box arrow
-  '\u25c0', // box arrow
+  '\u25c0\uFE0E', // box arrow
   '\u25b2', // box arrow
   '\u25bc', // box arrow
-  '\u25b6', // box arrow
+  '\u25b6\uFE0E', // box arrow
   '\u00a0' // space
 ], [
   '\u2b12', // triangle
@@ -116,7 +116,7 @@ const blocks = [
   '\u271b', // triangle
   '\u2725', // triangle
   '\u2731', // triangle
-  '\u2733', // triangle
+  '\u2733\uFE0E', // triangle
   '\u273a', // triangle
   '\u00a0' // space
 ]];
