@@ -129,15 +129,10 @@ function setup() {
   createCanvas(windowWidth, windowHeight);
   // fontsize = windowHeight / 28;
   fontsize = (windowHeight >> 6) * 2.75;
-  // gapX = -fontsize * 0.35;
   gapX = -fontsize >> 2;
-  // gapX = -8;
-  gridX = fontsize + gapX + 2;
-  // gridX = 16;
-  // gapY = fontsize * 0.2;
+  gridX = fontsize + gapX;
   gapY = fontsize >> 2;
   gridY = fontsize + gapY;
-  // gridY = 30;
   hLimit = ~~(windowHeight / gridY);
   wLimit = ~~(windowWidth / gridX);
   // build canvas array.  2D, must be grid of width/gridx height/gridy
@@ -153,6 +148,7 @@ function setup() {
   // Set text characteristics
   noStroke();
   // textFont(font);
+  textFont('dejavu_sans_mono');
   textSize(fontsize);
   textAlign(LEFT, TOP);
   rectMode(CORNERS);
@@ -160,26 +156,24 @@ function setup() {
 
 function draw() {
   background(0);
-  // draw the art, from the grid array.
-  // for (let x = 0; x < wLimit; ++x) {
-  //   for (let y = 0; y < hLimit; ++y) {
-  //     text(grid[x][y], x * gridX, y * gridY);
-  //   }
-  // }
-  let indexX = wLimit;
-  let indexY = hLimit;
-  while (indexX--) {
-    indexY = hLimit;
-    while (indexY--) {
-      text(grid[indexX][indexY], indexX * gridX, indexY * gridY);
+  //draw the art, from the grid array.
+  for (let x = 0; x < wLimit; ++x) {
+    for (let y = 0; y < hLimit; ++y) {
+      text(grid[x][y], x * gridX, y * gridY);
     }
   }
+  // let indexX = wLimit;
+  // let indexY = hLimit;
+  // while (indexX--) {
+  //   indexY = hLimit;
+  //   while (indexY--) {
+  //     text(grid[indexX][indexY], indexX * gridX, indexY * gridY);
+  //   }
+  // }
   // background for palette (dark blue rectangle)
-  fill(0, 32, 64);
-  // rect x, y, width, height
+  fill(64, 16, 0);
   rect(0, (height - (gridY * 2)) - 6, width, height); //clean this up
-  // fill(0, 32, 64);
-  // rect(19 * gridX, (height - (gridY * 2)) - 4, (20 * gridX), height);
+  text('\u25e5', width - gridX, 0);
   //draw the palette
   for (let i = 0; i < 18; ++i) {
     if (row === 0) {
@@ -196,8 +190,6 @@ function draw() {
     row === 3 ? fill(228) : fill(128);
     i === 17 ? text(arrows[1], (2 + i) * gridX, height - gridY) : false; // palette down
   }
-  fill(192, 160, 192);
-  text('\u23CF', width - gridX, 0);
   fill(255);
 }
 
@@ -233,7 +225,6 @@ function mouseDragged() {
   redraw();
   return false;
 }
-
 const eject = function() {
   if (mouseX >= width - (gridX)) {
     if (mouseY <= gridY && mouseX < width) {
@@ -241,7 +232,6 @@ const eject = function() {
     }
   }
 }
-
 const paletteShift = function() {
   if (mouseY > height - gridY * 2) {
     if (mouseX > 19 * gridX) {
@@ -347,14 +337,14 @@ const paletteSelect = function(row) {
 const disp = function() {
   let my_window = window.open("termdraw", "myWindow1", "height=\height,width=\width");
   let HTMLstring = "<!DOCTYPE html>\n";
-  HTMLstring = '<HTML>\n';
+  HTMLstring += '<HTML>\n';
   HTMLstring += '<HEAD>\n';
+  HTMLstring += "<link rel=\"stylesheet\" href=\"stylesheet.css\" type=\"text/css\" charset=\"utf-8\" />\n";
   HTMLstring += "<TITLE>░░░░▒▒▒▓▓▛▀▔✺▁▄▟▓▓▒▒▒░░░░</TITLE>\n";
   HTMLstring += '</HEAD>\n';
-  HTMLstring += "<BODY bgColor='000000 '>\n";
+  HTMLstring += "<body style=\"background-color: black; padding: 0px; margin: 0px;\">\n";
   HTMLstring += "<pre>";
-  HTMLstring +=
-    "<p style= \"color: #FFFFFF;  font-family:monospace;  font-size: ";
+  HTMLstring += "<p style= \"color: #FFFFFF;  font-family:monospace;  font-size: ";
   HTMLstring += ~~fontsize + "px;\">";
   for (let y = 0; y < hLimit; ++y) {
     for (let x = 0; x < wLimit; ++x) {
@@ -367,9 +357,4 @@ const disp = function() {
   HTMLstring += '</BODY>\n';
   HTMLstring += '</HTML>';
   my_window.document.write(HTMLstring);
-}
-
-function keyPressed() {
-  if (keyCode === 83) disp();
-  // return false; // prevent default
 }
