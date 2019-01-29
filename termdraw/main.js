@@ -1,35 +1,37 @@
 // termdraw unicode ansi art editor in javascript
 //shawn wilson 2019
-// ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
-// ▛░▀░▀░▀░▜▄▛▔▏▕▔▜▕▏▛▔▏▕▔▜▄▛░▀░▀░▀░▜▏
-// ▛░▀░▀░▀░▜▄▛▔▏▕▔▜▕▏▛▔▏▕▔▜▄▛░▀░▀░▀░▜▏
-// ▏▁░▁░▁░▁▟▒░▔▁▁▔▟░░▙▔▁▁▔░▒▙▁░▁░▁░▁▕▏
-// ▏░░░░▁◼▁◼▓▒▛░▔▟▔▏▕▔▙▔░▜▒▓◼▁◼▁░░░░▕▏
-// ▏░░░▕▕▕▕▕▄▟▘▗▟▛▜▄▄▛▜▙▖▝▙▄▏▏▏▏▏░░░▕▏
-// ▌▖▖▖▟▗▗▗▗░▛▏▟▄▖▖▖▗▗▗▄▙▕▜░▖▖▖▖▙▗▗▗▐▏
-// ▏▏▏▏▏▟▁▁▁▁▙▛▀▀▛░▚▞░▜▀▀▜▟▁▁▁▁▙▕▕▕▕▕▏
-// ▁▛▏▛▏░▛▀░▜▛▀░▀▌▚██▞▐▀░▀▜▛░▀▜░▕▜▕▜▁▏
-// ▐▒▏▒▏▒▌◼░◼░◼░◼▌▐◼◼▌▐◼░◼░◼░◼▐▒▕▒▕▒▌
-// ▔▙▏▙▏░▙▄░▟▙▄░◼▌▞██▚▐◼░▄▟▙░▄▟░▕▟▕▟▔▏
-// ▏▏▏▏▏▜▔▔▔▔▛▙▄▄▙░▞▚░▟▄▄▟▜▔▔▔▔▛▕▕▕▕▕▏
-// ▌▘▘▘▜▝▝▝▝░▙▏▜▀▘▘▘▝▝▝▀▛▕▟░▘▘▘▘▛▝▝▝▐▏
-// ▏░░░▕▕▕▕▕▀▜▖▝▜▙▟▀▀▙▟▛▘▗▛▀▏▏▏▏▏░░░▕▏
-// ▏░░░░▔◼▔◼▓▒▙░▁▜▁▏▕▁▛▁░▟▒▓◼▔◼▔░░░░▕▏
-// ▏▔░▔░▔░▔▜▒░▁▔▔▁▜░░▛▁▔▔▁░▒▛▔░▔░▔░▔▕▏
-// ▙░▄░▄░▄░▟▀▙▁▏▕▁▟▕▏▙▁▏▕▁▟▀▙░▄░▄░▄░▟▏
-// ▙░▄░▄░▄░▟▀▙▁▏▕▁▟▕▏▙▁▏▕▁▟▀▙░▄░▄░▄░▟▏
-// ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔
+// ▨▧▨▧▨■■▣▣□□▣▣■■▧▨▧▨▧
+// ▄▟▓█▓▓█▒▒▓▓▒▒█▓▓█▓▙▄
+// █▒▒▓▛▜▓▒░░░░▒▓▛▜▓▒▒█
+// ▌◨◧▙▚▞▟▣□◲◱□▣▙▚▞▟◨◧▐
+// ▏◥▌▛◩⬔▜◢┬┬┬┬◣▛◩⬔▜▐◤▕
+// ▏├▌▌⬕◪▐├▛┼┼▜┤▌⬕◪▐▐┤▕
+// ▏├▏▏✺✺▕├▙┼┼▟┤▏✺✺▕▕┤▕
+// ▏├▌▌◩⬔▐◥┴┴┴┴◤▌◩⬔▐▐┤▕
+// ▏◢▌▙⬕◪▟◲┐◲◱┌◱▙⬕◪▟▐◣▕
+// ▌◨◧▛▞▚▜◳┘◳◰└◰▛▞▚▜◨◧▐
+// █▒▒▓▙▟▓▒░░░░▒▓▙▟▓▒▒█
+// ▀▜▓█▓▓█▒▒▓▓▒▒█▓▓█▓▛▀
+// ▨▧▨▧▨■■▣▣□□▣▣■■▧▨▧▨▧
 // to do:
 //
 // palettes 2 -3 pin down the useful drawing chars for these
 // add color array of same size of grid, consider 3rd array dimension
-// add ability to save, dump grid to txt
+// add ability to save, dump grid to txt (somewhat implemented)
+// use dom elements, div?, to have input form to load, and one to display exported txt
 // breaks on resize
-let fontsize;
-let gapX = 0;
-let gridX = 0;
-let gapY = 0;
-let gridY = 0;
+// let fontsize;
+// let gapX = 0;
+// let gridX = 0;
+// let gapY = 0;
+// let gridY = 0;
+const fontsize = (window.innerHeight >> 6) * 2.75;
+const gapX = -fontsize >> 2;
+const gridX = fontsize + gapX;
+const gapY = fontsize >> 2;
+const gridY = fontsize + gapY;
+const hLimit = ~~(window.innerHeight / gridY);
+const wLimit = ~~(window.innerWidth / gridX);
 // let font;
 // let mouse = new p5.Vector(0.0, 0.0);
 let slot = 4;
@@ -121,21 +123,9 @@ const blocks = [
   '\u00a0' // space
 ]];
 
-// function preload() {
-//   font = loadFont("assets/DejaVuSansMono.ttf");
-// }
-
 function setup() {
   createCanvas(windowWidth, windowHeight);
-  // fontsize = windowHeight / 28;
-  fontsize = (windowHeight >> 6) * 2.75;
-  gapX = -fontsize >> 2;
-  gridX = fontsize + gapX;
-  gapY = fontsize >> 2;
-  gridY = fontsize + gapY;
-  hLimit = ~~(windowHeight / gridY);
-  wLimit = ~~(windowWidth / gridX);
-  // build canvas array.  2D, must be grid of width/gridx height/gridy
+  // build canvas array.  2D, grid of width/gridx height/gridy
   for (let x = 0; x < wLimit; ++x) {
     grid[x] = [hLimit];
   }
@@ -147,7 +137,6 @@ function setup() {
   noLoop();
   // Set text characteristics
   noStroke();
-  // textFont(font);
   textFont('dejavu_sans_mono');
   textSize(fontsize);
   textAlign(LEFT, TOP);
@@ -162,19 +151,11 @@ function draw() {
       text(grid[x][y], x * gridX, y * gridY);
     }
   }
-  // let indexX = wLimit;
-  // let indexY = hLimit;
-  // while (indexX--) {
-  //   indexY = hLimit;
-  //   while (indexY--) {
-  //     text(grid[indexX][indexY], indexX * gridX, indexY * gridY);
-  //   }
-  // }
   // background for palette (dark blue rectangle)
   fill(64, 16, 0);
-  rect(0, (height - (gridY * 2)) - 6, width, height); //clean this up
+  rect(0, (height - (gridY * 2)) - 6, width, height);
   text('\u25e5', width - gridX, 0);
-  //draw the palette
+  //draw the palette (tuck this mess into a function eventually)
   for (let i = 0; i < 18; ++i) {
     if (row === 0) {
       i !== slot ? fill(128) : fill(228);
@@ -344,7 +325,7 @@ const disp = function() {
   HTMLstring += '</HEAD>\n';
   HTMLstring += "<body style=\"background-color: black; padding: 0px; margin: 0px;\">\n";
   HTMLstring += "<pre>";
-  HTMLstring += "<p style= \"color: #FFFFFF;  font-family:monospace;  font-size: ";
+  HTMLstring += "<p style= \"color: #FFFFFF;  font-size: ";
   HTMLstring += ~~fontsize + "px;\">";
   for (let y = 0; y < hLimit; ++y) {
     for (let x = 0; x < wLimit; ++x) {
