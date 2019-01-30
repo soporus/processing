@@ -124,7 +124,8 @@ const blocks = [
 ]];
 
 function setup() {
-  createCanvas(windowWidth, windowHeight);
+
+  const mainCanvas = createCanvas(window.innerWidth, window.innerHeight);
   // build canvas array.  2D, grid of width/gridx height/gridy
   for (let x = 0; x < wLimit; ++x) {
     grid[x] = [hLimit];
@@ -134,13 +135,13 @@ function setup() {
       grid[x][y] = '\u00a0';
     }
   }
-  noLoop();
   // Set text characteristics
   noStroke();
   textFont('dejavu_sans_mono');
   textSize(fontsize);
   textAlign(LEFT, TOP);
   rectMode(CORNERS);
+  noLoop();
 }
 
 function draw() {
@@ -152,23 +153,24 @@ function draw() {
     }
   }
   // background for palette (dark blue rectangle)
-  fill(64, 16, 0);
+  fill(32, 32, 32);
   rect(0, (height - (gridY * 2)) - 6, width, height);
+  fill(64, 64, 64);
   text('\u25e5', width - gridX, 0);
   //draw the palette (tuck this mess into a function eventually)
   for (let i = 0; i < 18; ++i) {
     if (row === 0) {
-      i !== slot ? fill(128) : fill(228);
-    } else fill(128);
+      i !== slot ? fill(160) : fill(255);
+    } else fill(160);
     // highlight slot
     text(blocks[rowA][i], i * gridX, height - (gridY * 2)); // row 1
-    row === 2 ? fill(228) : fill(128);
+    row === 2 ? fill(255) : fill(160);
     i === 17 ? text(arrows[0], (2 + i) * gridX, height - (gridY * 2)) : false; //palette up
     if (row === 1) {
-      i !== slot ? fill(128) : fill(228);
-    } else fill(128);
+      i !== slot ? fill(160) : fill(255);
+    } else fill(160);
     text(blocks[rowB][i], i * gridX, height - gridY); //  row 2
-    row === 3 ? fill(228) : fill(128);
+    row === 3 ? fill(255) : fill(160);
     i === 17 ? text(arrows[1], (2 + i) * gridX, height - gridY) : false; // palette down
   }
   fill(255);
