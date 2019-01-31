@@ -20,25 +20,19 @@
 // add ability to save, dump grid to txt (somewhat implemented)
 // use dom elements, div?, to have input form to load, and one to display exported txt
 // breaks on resize
-// let fontsize;
-// let gapX = 0;
-// let gridX = 0;
-// let gapY = 0;
-// let gridY = 0;
+
+let canvastoggle = false;
 const fontsize = (window.innerHeight >> 6) * 2.75;
 const gapX = -fontsize >> 2;
 const gridX = fontsize + gapX;
 const gapY = fontsize >> 2;
 const gridY = fontsize + gapY;
-const hLimit = ~~(window.innerHeight / gridY);
-const wLimit = ~~(window.innerWidth / gridX);
-// let font;
-// let mouse = new p5.Vector(0.0, 0.0);
+const hLimit = ~~((window.innerHeight / gridY) - 2);
+const wLimit = ~~((window.innerWidth / gridX) - 1);
 let slot = 4;
 let row = 0;
 let brush = '\u2588';
 let grid = [];
-// let pOffset = 0;
 let rowA = 0;
 let rowB = 1;
 
@@ -124,9 +118,8 @@ const blocks = [
 ]];
 
 function setup() {
-
   const mainCanvas = createCanvas(window.innerWidth, window.innerHeight);
-  // build canvas array.  2D, grid of width/gridx height/gridy
+  document.getElementById("export").style.visibility = "hidden";
   for (let x = 0; x < wLimit; ++x) {
     grid[x] = [hLimit];
   }
@@ -178,41 +171,69 @@ function draw() {
 
 function mousePressed() {
   eject();
-  if (!paletteShift()) {
-    if (!paletteBox()) {
-      if (mouseX > 0) {
-        if (mouseY > 0) {
-          if (mouseY < gridY * 17) {
-            if (mouseX < width - gridX * 1.5) {
-              grid[~~(mouseX / gridX)][~~(mouseY / gridY)] = brush;
+  if (!canvastoggle) {
+    if (!paletteShift()) {
+      if (!paletteBox()) {
+        if (mouseX > 0) {
+          if (mouseY > 0) {
+            if (mouseY < gridY * 17) {
+              if (mouseX < width - gridX * 1.5) {
+                grid[~~(mouseX / gridX)][~~(mouseY / gridY)] = brush;
+              }
             }
           }
         }
       }
     }
+    redraw();
+    return false;
   }
-  redraw();
-  return false;
+  return true;
 }
 
 function mouseDragged() {
-  if (mouseX > 0) {
-    if (mouseY > 0) {
-      if (mouseY < gridY * 17) {
-        if (mouseX < width - gridX * 1.5) {
-          grid[~~(mouseX / gridX)][~~(mouseY / gridY)] = brush;
+  if (!canvastoggle) {
+    if (mouseX > 0) {
+      if (mouseY > 0) {
+        if (mouseY < gridY * 17) {
+          if (mouseX < width - gridX * 1.5) {
+            grid[~~(mouseX / gridX)][~~(mouseY / gridY)] = brush;
+          }
         }
       }
     }
+    redraw();
+    return false;
   }
   redraw();
-  return false;
+  return true;
 }
 const eject = function() {
   if (mouseX >= width - (gridX)) {
     if (mouseY <= gridY && mouseX < width) {
-      disp();
+      if (canvastoggle) {
+        document.getElementById("export").style.visibility = "hidden";
+        canvastoggle = !canvastoggle;
+      } else {
+        let textbuffer = "<pre>";
+        textbuffer += "<p  style= \" display:inline; letter-spacing:" + 2 +
+          "px; color: white;  font-size: ";
+        textbuffer += fontsize + "px; line-height:" + 1.25 + "\">";
+        for (let y = 0; y < hLimit; ++y) {
+          for (let x = 0; x < wLimit; ++x) {
+            textbuffer += grid[x][y];
+          }
+          textbuffer += "<br />";
+        }
+        textbuffer += '</p>\n';
+        textbuffer += "</pre>\n";
+        document.getElementById("export").innerHTML = (textbuffer);
+        document.getElementById("export").style.visibility = "visible";
+        document.getElementById("export").style.opacity = "100";
+        canvastoggle = !canvastoggle;
+      }
     }
+    // disp();
   }
 }
 const paletteShift = function() {
@@ -242,6 +263,7 @@ const paletteBox = function() {
         row = 0;
         paletteSelect(row);
         brush = blocks[rowA][slot];
+        document.title = "░░░░▒▒▒▓▓▛▀▔" + brush + "▁▄▟▓▓▒▒▒░░░░";
         return true;
       }
     }
@@ -250,6 +272,7 @@ const paletteBox = function() {
         row = 1;
         paletteSelect(row);
         brush = blocks[rowB][slot];
+        document.title = "░░░░▒▒▒▓▓▛▀▔" + brush + "▁▄▟▓▓▒▒▒░░░░";
         return true;
       }
     }
@@ -317,27 +340,28 @@ const paletteSelect = function(row) {
   }
 }
 
-const disp = function() {
-  let my_window = window.open("termdraw", "myWindow1", "height=\height,width=\width");
-  let HTMLstring = "<!DOCTYPE html>\n";
-  HTMLstring += '<HTML>\n';
-  HTMLstring += '<HEAD>\n';
-  HTMLstring += "<link rel=\"stylesheet\" href=\"stylesheet.css\" type=\"text/css\" charset=\"utf-8\" />\n";
-  HTMLstring += "<TITLE>░░░░▒▒▒▓▓▛▀▔✺▁▄▟▓▓▒▒▒░░░░</TITLE>\n";
-  HTMLstring += '</HEAD>\n';
-  HTMLstring += "<body style=\"background-color: black; padding: 0px; margin: 0px;\">\n";
-  HTMLstring += "<pre>";
-  HTMLstring += "<p style= \"color: #FFFFFF;  font-size: ";
-  HTMLstring += ~~fontsize + "px;\">";
-  for (let y = 0; y < hLimit; ++y) {
-    for (let x = 0; x < wLimit; ++x) {
-      HTMLstring += grid[x][y];
-    }
-    HTMLstring += '<br \\>';
-  }
-  HTMLstring += '</p>\n';
-  HTMLstring += "</pre>\n";
-  HTMLstring += '</BODY>\n';
-  HTMLstring += '</HTML>';
-  my_window.document.write(HTMLstring);
-}
+// const disp = function() {
+//   let my_window = window.open("termdraw", "myWindow1", "height=\height,width=\width");
+//   let HTMLstring = "<!DOCTYPE html>\n";
+//   HTMLstring += '<HTML>\n';
+//   HTMLstring += '<HEAD>\n';
+//   HTMLstring +=
+//     "<link rel=\"stylesheet\" href=\"stylesheet.css\" type=\"text/css\" charset=\"utf-8\" />\n";
+//   HTMLstring += "<TITLE>░░░░▒▒▒▓▓▛▀▔✺▁▄▟▓▓▒▒▒░░░░</TITLE>\n";
+//   HTMLstring += '</HEAD>\n';
+//   HTMLstring += "<body style=\"background-color: black; padding: 0px; margin: 0px;\">\n";
+//   HTMLstring += "<pre>";
+//   HTMLstring += "<p style= \"color: #FFFFFF;  font-size: ";
+//   HTMLstring += ~~fontsize + "px;\">";
+//   for (let y = 0; y < hLimit; ++y) {
+//     for (let x = 0; x < wLimit; ++x) {
+//       HTMLstring += grid[x][y];
+//     }
+//     HTMLstring += '<br \\>';
+//   }
+//   HTMLstring += '</p>\n';
+//   HTMLstring += "</pre>\n";
+//   HTMLstring += '</BODY>\n';
+//   HTMLstring += '</HTML>';
+//   my_window.document.write(HTMLstring);
+// }
