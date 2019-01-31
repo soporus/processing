@@ -14,11 +14,10 @@
 // ▀▜▓█▓▓█▒▒▓▓▒▒█▓▓█▓▛▀
 // ▨▧▨▧▨■■▣▣□□▣▣■■▧▨▧▨▧
 // to do:
-//
+// remove selection on div hide
+// implement way to load txt in
 // palettes 2 -3 pin down the useful drawing chars for these
 // add color array of same size of grid, consider 3rd array dimension
-// add ability to save, dump grid to txt (somewhat implemented)
-// use dom elements, div?, to have input form to load, and one to display exported txt
 // breaks on resize
 
 let canvastoggle = false;
@@ -213,6 +212,12 @@ const eject = function() {
     if (mouseY <= gridY && mouseX < width) {
       if (canvastoggle) {
         document.getElementById("export").style.visibility = "hidden";
+        //remove selection so it doesn't interfere with drawing
+        if (window.getSelection) {
+          window.getSelection().removeAllRanges();
+        } else if (document.selection) {
+          document.slection.empty();
+        }
         canvastoggle = !canvastoggle;
       } else {
         let textbuffer = "<pre>";
